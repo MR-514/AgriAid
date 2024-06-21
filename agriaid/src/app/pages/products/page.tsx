@@ -1,9 +1,10 @@
 "use client"
 
-import { SfButton, SfCounter, SfIconFavorite, SfIconShoppingCart, SfLink, SfRating } from "@storefront-ui/react";
+import { SfButton, SfCounter, SfIconChevronRight, SfIconFavorite, SfIconSearch, SfIconShoppingCart, SfLink, SfRating } from "@storefront-ui/react";
 import algoliasearch from "algoliasearch";
 import { Hits, InstantSearch, Pagination, RangeInput, RefinementList, SearchBox } from "react-instantsearch";
 import styles from "./product-list.module.css";
+import { useState } from "react";
 
 
 const client = algoliasearch("6J4Z86A51F", "3fdeb644e42652f2194e1a4bd6f91822");
@@ -11,15 +12,47 @@ const index = client.initIndex("agriAid");
 
 
 export default function ProductList() {
+    const [productId, setProductId] = useState('')
+    const [sku, setSku] = useState('')
+    const [quantity, setQuantity] = useState(1)
+    const [variantId, setVariantId] = useState('')
 
-    const handleClick = (productId: any) => {
-        console.log(productId)
+    const handleClick = async (productData: any) => {
+        // console.log(productData)
+        setProductId(productData.productID)
+        setSku(productData.sku)
+        setVariantId(productData.objectID.split('.').pop())
+        await new Promise(resolve => setTimeout(resolve, 0));
+        await addToCart()
     }
 
+    const addToCart = async () => {
+        const customerId = localStorage.getItem("customerId");
+        console.log(customerId)
+
+        if (!customerId) {
+            alert("Customer not found . Please log in.");
+            return;
+        }
+        try {
+            const productData = {
+                customerId, productId, variantId, quantity, sku
+            }
+            console.log("product data in post request", productData)
+            const response = await fetch(`/api/cart/${customerId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            });
+            console.log(response)
+        } catch (error) {
+            console.log("Error adding product to cart:", error);
+        }
+    };
+
     function Hit({ hit }: any) {
-        // product id - product id   
-        // object id - variant id
-        // console.log(hit.productID, hit.objectID)
         return (
             <div className={styles.productlistContainer}>
                 <div className={`border border-neutral-200 rounded-md hover:shadow-lg max-w-[250px] ${styles.productCard}`}>
@@ -77,7 +110,7 @@ export default function ProductList() {
                         }
 
                         <span className="block pb-2 font-bold typography-text-lg">Rs. {(hit.prices.USD["min"])}</span>
-                        <SfButton size="sm" slotPrefix={<SfIconShoppingCart size="sm" onClick={() => handleClick(hit.ojectID)} />}>
+                        <SfButton size="sm" slotPrefix={<SfIconShoppingCart size="sm" />} onClick={() => handleClick(hit)}>
                             Add to cart
                         </SfButton>
                     </div>
@@ -91,24 +124,30 @@ export default function ProductList() {
             <main className={styles.productListMainContainer}>
 
                 <div className={styles.filterContainer}>
-                    <div>
-                        <h1>Filter based on type</h1>
-                        <RefinementList attribute="attributes.type" className="refinementlist-style count-button" />
+                    <h1><SfIconChevronRight /> Filters</h1>
+                    <div className={styles.individualFilter}>
+                        <h1>Filter based on Type</h1>
+                        <RefinementList attribute="attributes.type" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
-                    <div>
+                    <div className={styles.individualFilter}>
                         <h1>Filter based on Category</h1>
-                        <RefinementList attribute="categories.en-US.lvl0" />
+                        <RefinementList attribute="categories.en-US.lvl0" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
-                    <div>
+                    <div className={styles.individualFilter}>
                         <h1>Filter based on Sub-Category</h1>
-                        <RefinementList attribute="categoryKeys.en-US" />
+                        <RefinementList attribute="categoryKeys.en-US" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
 
                 </div>
                 <div className={styles.productsMainContainer}>
+                    <div className={styles.searchBoxContainer}>
+                        <div>Search</div>
+                        <SearchBox className={styles.searchBox} />
+                    </div>
+
                     <div className={styles.productListgrid}>
                         <Hits hitComponent={Hit} />
                     </div>
@@ -117,9 +156,6 @@ export default function ProductList() {
 
                 </div>
             </main>
-
-            <SearchBox />
-
 
         </InstantSearch>
 

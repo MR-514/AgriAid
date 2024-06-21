@@ -1,0 +1,23 @@
+.loginContainer{
+    margin: 20px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.loginContainer>:first-child{
+    width: 50%;
+    background: url();
+}
+.loginContainer>:last-child{
+    width: 50%;
+}
+.buttonContainer{
+    margin-bottom: 20px;
+}
+.signupContainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

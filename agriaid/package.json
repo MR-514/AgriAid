@@ -9,10 +9,14 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@commercetools/sdk-client-v2": "^2.5.0",
     "@storefront-ui/react": "^2.6.3",
     "algoliasearch": "^4.23.3",
+    "axios": "^1.7.2",
     "instantsearch.js": "^4.71.0",
     "next": "14.2.3",
+    "node-fetch": "^3.3.2",
     "react": "^18",
     "react-dom": "^18",
     "react-instantsearch": "^7.11.0"
