@@ -1,0 +1,12 @@
+.cartContainer{
+    display: flex;
+    /* width: 90vw; */
+    align-items: center;
+    justify-content: center;
+}
+.cartContainer>:first-child{
+    width: 60%;
+}
+.cartContainer>:last-child{
+    width: 30%;
+}
