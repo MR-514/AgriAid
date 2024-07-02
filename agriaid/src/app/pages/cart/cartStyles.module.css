@@ -1,7 +1,7 @@
 .cartContainer{
     display: flex;
     /* width: 90vw; */
-    align-items: center;
+    /* align-items: center; */
     justify-content: center;
 }
 .cartContainer>:first-child{

@@ -13,9 +13,9 @@ async function createCart(customerId: String) {
             },
         });
         return newCart;
-        console.log(newCart)
+        // console.log(newCart)
     } catch (error) {
-        console.log(error);
+        // console.log(error);
     }
 }
 
@@ -32,7 +32,7 @@ export async function GET(req: Request) {
         });
 
         // Log and return the fetched data
-        console.log("Fetched cart data:", response.body);
+        // console.log("Fetched cart data:", response.body);
         return new Response(JSON.stringify(response.body), { status: 200 });
     } catch (error) {
         return new Response(JSON.stringify({ error: "Failed to fetch cart details" }), { status: 500 });
@@ -77,11 +77,11 @@ export async function POST(req) {
                 }],
             },
         });
-        console.log("added line item to cart")
+        // console.log("added line item to cart")
 
         return new Response(JSON.stringify(updateResponse.body), { status: 200 });
     } catch (error) {
-        console.log("Error updating cart:", error);
+        // console.log("Error updating cart:", error);
         return new Response(JSON.stringify({ error: "Failed to update cart" }), { status: 500 });
     }
 }
