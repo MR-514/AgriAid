@@ -1,9 +1,9 @@
 import { ctpClient } from "../../../utils/ctConfiguration"
 export async function POST(req: Request) {
     const requestdata = await req.json()
-    console.log("req is : ", requestdata)
+    // console.log("req is : ", requestdata)
     const { firstname, lastname, email, password } = requestdata
-    console.log(firstname, lastname, email, password)
+    // console.log(firstname, lastname, email, password)
     try {
         const response = await ctpClient.execute({
             method: "POST",

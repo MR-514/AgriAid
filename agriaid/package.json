@@ -12,6 +12,7 @@
     "@chakra-ui/react": "^2.8.2",
     "@commercetools/sdk-client-v2": "^2.5.0",
     "@storefront-ui/react": "^2.6.3",
+    "@voucherify/sdk": "^2.7.2",
     "algoliasearch": "^4.23.3",
     "axios": "^1.7.2",
     "instantsearch.js": "^4.71.0",

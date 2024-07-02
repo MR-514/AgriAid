@@ -29,14 +29,13 @@ import { useEffect } from "react";
 import styles from "./productDetail.module.css"
 
 import classNames from "classnames";
+import { useRouter } from 'next/navigation';
 
 // configure algolia
 const client = algoliasearch("6J4Z86A51F", "3fdeb644e42652f2194e1a4bd6f91822");
 const index = client.initIndex("agriAid");
 
 export default function ProductDetail({ params }: any) {
-    // const id = params.productid
-    // console.log(id)
 
     const inputId = useId();
     const min = 1;
@@ -59,6 +58,9 @@ export default function ProductDetail({ params }: any) {
         }
     };
 
+    const router = useRouter()
+
+
     // state to store products
     const [product, setProduct] = useState(null);
 
@@ -67,9 +69,9 @@ export default function ProductDetail({ params }: any) {
         const fetchProductAndVariant = async () => {
             try {
                 const productResponse = await index.getObject(params.productid)
-                // console.log(productResponse)
-                const { images, description, attributes, name, prices }: any = productResponse
-                setProduct({ images, description, attributes, name, prices });
+                console.log(productResponse)
+                const { images, description, attributes, name, prices, productID, sku, objectID }: any = productResponse
+                setProduct({ images, description, attributes, name, prices, productID, sku, objectID });
 
             } catch (error) {
                 console.error("Error fetching product and variant:", error);
@@ -84,7 +86,31 @@ export default function ProductDetail({ params }: any) {
         return <div>Loading...</div>;
     }
 
-    const { images, description, attributes, name, prices }: any = product;
+    const { images, description, attributes, name, prices, productID, sku, objectID }: any = product;
+
+    const addLineItem = async () => {
+        const customerId = localStorage.getItem("customerId");
+        // console.log("customer id in post cart client side", customerId, productID);
+        if (!customerId) {
+            alert("Customer not found . Please log in.");
+            return;
+        }
+
+        try {
+            const response = await fetch(`/api/cart/${customerId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ customerId, productId:productID, variantId:objectID, quantity: value, sku }),
+            });
+            console.log(response)
+            router.push('/pages/cart')
+        } catch (error) {
+            alert("something went wrong please try again")
+
+        }
+    }
     return (<>
         <section className={`${styles.productDetailContainer}`}>
             {/* image gallery section */}
@@ -246,7 +272,7 @@ export default function ProductDetail({ params }: any) {
                                 </SfButton>
                             </div>
                         </div>
-                        <SfButton size="lg" className="w-full xs:ml-4" slotPrefix={<SfIconShoppingCart size="sm" />}>
+                        <SfButton onClick={addLineItem} size="lg" className="w-full xs:ml-4" slotPrefix={<SfIconShoppingCart size="sm" />}>
                             Add to cart
                         </SfButton>
                     </div>

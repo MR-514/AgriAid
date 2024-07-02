@@ -1,23 +1,40 @@
-.loginContainer{
-    margin: 20px;
-    padding: 20px;
+.loginContainer {
+    max-width: 1320px;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.loginContainer>:first-child{
+.loginContainer>:first-child {
     width: 50%;
-    background: url();
+    height: 100%;
+    background: url('/login1.jpg') center center/cover;
 }
-.loginContainer>:last-child{
+
+.loginContainer>:last-child {
+    padding: 30px 40px;
     width: 50%;
 }
-.buttonContainer{
+
+.buttonContainer {
     margin-bottom: 20px;
 }
-.signupContainer{
+
+.signupContainer {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.linkToSignup {
+    color: red;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.linkToSignup:hover {
+    color: darkred;
+    text-decoration: underline;
 }

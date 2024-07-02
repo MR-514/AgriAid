@@ -68,9 +68,9 @@ export default function FormFields() {
 
     return (
         <div className={styles.loginContainer}>
-            <div>image Area</div>
+            <div className={styles.imageContainer}></div>
             <div className="px-4">
-                <h1 className="mb-4 typography-headline-4 font-bold">Login to Continue</h1>
+                <h1 className="mb-4 typography-headline-4 font-bold text-3xl">Login to Continue</h1>
                 <form onSubmit={sendForm}>
                     <label className="block my-4">
                         <span className="typography-label-sm font-medium">Email *</span>
@@ -117,7 +117,7 @@ export default function FormFields() {
                     <div className={styles.signupContainer}>
                         <p className="text-neutral-500 typography-text-sm mt-8">
                             Want to Create an Account?
-                            <Link href="/pages/register">
+                            <Link className={styles.linkToSignup} href="/pages/register">
                                 Sign Up
                             </Link>
                         </p>
