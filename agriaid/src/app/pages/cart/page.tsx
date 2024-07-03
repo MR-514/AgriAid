@@ -119,7 +119,7 @@ export default function Cart() {
     }, [informationAlert]);
 
     const formatPrice = (price: number) =>
-        new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(price);
+        new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(price);
 
     const itemsSubtotal = () =>
         orderDetails.originalPrice + orderDetails.delivery + orderDetails.tax;
@@ -135,7 +135,7 @@ export default function Cart() {
     const checkCoupon = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         const customerId = localStorage.getItem("customerId");
-        const total = finalAmount(); 
+        const total = finalAmount();
         try {
             const response = await fetch(`/api/check-coupon`, {
                 method: 'POST',
@@ -149,8 +149,8 @@ export default function Cart() {
                 throw new Error('Failed to apply coupon');
             }
             const result = await response.json();
-            const {discount_amount, total_amount} = result
-            setPromoCode(discount_amount/100) //converting cents 
+            const { discount_amount, total_amount } = result
+            setPromoCode(discount_amount / 100) //converting cents 
             setPositiveAlert(true);
 
         } catch (error) {
@@ -159,6 +159,23 @@ export default function Cart() {
 
         }
     };
+
+    const handleCheckout = async () => {
+        try {
+            const response = await fetch('/api/checkout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ productsInCart, promoCode }),
+            });
+            const { url } = await response.json();
+            router.push(url);
+        } catch (error) {
+            console.error('Error creating checkout session:', error);
+        }
+    };
+    
 
 
     return (
@@ -299,7 +316,7 @@ export default function Cart() {
                                 <p>Total</p>
                                 <p>{formatPrice(finalAmount())}</p>
                             </div>
-                            <SfButton size="lg" className="w-full">
+                            <SfButton onClick={handleCheckout} size="lg" className="w-full">
                                 Place Order And Pay
                             </SfButton>
                             <div className="text-xs mt-4 text-center">
