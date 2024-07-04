@@ -127,17 +127,17 @@ export default function ProductList() {
                 <div className={styles.filterContainer}>
                     <h1><SfIconChevronRight /> Filters</h1>
                     <div className={styles.individualFilter}>
-                        <h1>Filter based on Type</h1>
+                        <h1>Filter by Type</h1>
                         <RefinementList attribute="attributes.type" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
                     <div className={styles.individualFilter}>
-                        <h1>Filter based on Category</h1>
+                        <h1>Filter by Category</h1>
                         <RefinementList attribute="categories.en-US.lvl0" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
                     <div className={styles.individualFilter}>
-                        <h1>Filter based on Sub-Category</h1>
+                        <h1>Filter by Sub-Category</h1>
                         <RefinementList attribute="categoryKeys.en-US" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
