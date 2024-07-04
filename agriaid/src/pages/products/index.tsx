@@ -1,10 +1,10 @@
 "use client"
 
-import { SfButton, SfCounter, SfIconChevronRight, SfIconFavorite, SfIconSearch, SfIconShoppingCart, SfLink, SfRating } from "@storefront-ui/react";
+import { SfButton, SfCounter, SfIconCheckCircle, SfIconChevronRight, SfIconClose, SfIconFavorite, SfIconSearch, SfIconShoppingCart, SfLink, SfRating } from "@storefront-ui/react";
 import algoliasearch from "algoliasearch";
 import { Hits, InstantSearch, Pagination, RangeInput, RefinementList, SearchBox } from "react-instantsearch";
 import styles from "./product-list.module.css";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 
 const client = algoliasearch("6J4Z86A51F", "3fdeb644e42652f2194e1a4bd6f91822");
@@ -16,6 +16,10 @@ export default function ProductList() {
     const [sku, setSku] = useState('')
     const [quantity, setQuantity] = useState(1)
     const [variantId, setVariantId] = useState('')
+    const [informationAlert, setInformationAlert] = useState(false);
+    const [addToCartResponse, setAddToCartResponse] = useState('')
+    const informationTimer = useRef(0);
+
 
     const handleClick = async (productData: any) => {
         // console.log(productData)
@@ -47,11 +51,25 @@ export default function ProductList() {
                 },
                 body: JSON.stringify(productData)
             });
-            // console.log(response)
+            const result = await response.json()
+            if (response.status === 200) {
+                setAddToCartResponse(result.message)
+                setInformationAlert(true);
+
+            }
         } catch (error) {
             console.log("Error adding product to cart:", error);
         }
     };
+
+    // information alert
+    useEffect(() => {
+        clearTimeout(informationTimer.current);
+        informationTimer.current = window.setTimeout(() => setInformationAlert(false), 1000);
+        return () => {
+            clearTimeout(informationTimer.current);
+        };
+    }, [informationAlert]);
 
     function Hit({ hit }: any) {
         return (
@@ -127,17 +145,17 @@ export default function ProductList() {
                 <div className={styles.filterContainer}>
                     <h1><SfIconChevronRight /> Filters</h1>
                     <div className={styles.individualFilter}>
-                        <h1>Filter based on Type</h1>
+                        <h1>Filter by Type</h1>
                         <RefinementList attribute="attributes.type" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
                     <div className={styles.individualFilter}>
-                        <h1>Filter based on Category</h1>
+                        <h1>Filter by Category</h1>
                         <RefinementList attribute="categories.en-US.lvl0" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
                     <div className={styles.individualFilter}>
-                        <h1>Filter based on Sub-Category</h1>
+                        <h1>Filter by Sub-Category</h1>
                         <RefinementList attribute="categoryKeys.en-US" className={`refinementlist-style count-button ${styles.filterResults}`} />
 
                     </div>
@@ -159,6 +177,26 @@ export default function ProductList() {
             </main>
 
         </InstantSearch>
+        <div className="absolute top-0 right-0 mx-2 mt-2 sm:mr-6">
+            {informationAlert && (
+                <div
+                    role="alert"
+                    className="flex items-start md:items-center shadow-md max-w-[600px] bg-positive-100 pr-2 pl-4 mb-2 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
+                >
+                    <SfIconCheckCircle className="mr-2 my-2 text-positive-700" />
+                    <p className="py-2 mr-2">{addToCartResponse}</p>
+                    <button
+                        type="button"
+                        className="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900"
+                        aria-label="Close positive alert"
+                        onClick={() => setInformationAlert(false)}
+                    >
+                        <SfIconClose className="hidden md:block" />
+                        <SfIconClose size="sm" className="md:hidden block" />
+                    </button>
+                </div>
+            )}
+        </div>
 
     </>
 }

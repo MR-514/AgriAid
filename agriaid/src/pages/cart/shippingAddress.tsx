@@ -12,7 +12,7 @@ const countries = [
 ] as const;
 const states = ['Karnataka', 'California', 'Florida', 'New York', 'Texas'] as const;
 
-export default function AddressForm() {
+export default function AddressForm({ onSubmitForm, showCart }) {
     const [streetIsValid, setStreetIsValid] = useState(true);
 
     const validateStreet = (e: ChangeEvent<HTMLInputElement> | FocusEvent<HTMLInputElement>) => {
@@ -54,7 +54,7 @@ export default function AddressForm() {
             }
             const result = await response.json();
             console.log(result)
-            router.push('/api/checkout')
+            onSubmitForm(true);
 
         } catch (error) {
             console.log('Something went wrong:', error);
@@ -64,8 +64,10 @@ export default function AddressForm() {
 
     return (
         <div className="min-h-screen flex items-center justify-center">
+
             <form className="p-4 flex gap-4 flex-wrap text-neutral-900 border border-gray-300 rounded-lg shadow-lg" style={{ maxWidth: 800, padding: 30 }} onSubmit={onSubmit}>
-                <h2 className="w-full text-3xl typography-headline-4 md:typography-headline-3 font-bold">Set Up Billing address</h2>
+
+                <h2 className="w-full text-3xl typography-headline-4 md:typography-headline-3 font-bold">Set Up Shipping address</h2>
                 <label className="w-full md:w-auto flex-grow flex flex-col gap-0.5 mt-4 md:mt-0">
                     <span className="typography-text-sm font-medium">First Name</span>
                     <SfInput name="firstName" autoComplete="given-name" required />
@@ -130,17 +132,20 @@ export default function AddressForm() {
                     <SfInput name="zipCode" placeholder="eg. 12345" autoComplete="postal-code" required />
                 </label>
 
-                <label className="w-full flex items-center gap-2">
+                {/* <label className="w-full flex items-center gap-2">
                     <SfCheckbox name="useAsShippingAddress" />
                     Use as shipping address
-                </label>
+                </label> */}
 
                 <div className="w-full flex gap-4 mt-4 md:mt-0 md:justify-end">
+                    <SfButton type="button" onClick={() => { showCart() }} className="w-full md:w-auto">
+                        Show Cart Details
+                    </SfButton>
                     <SfButton type="reset" variant="secondary" className="w-full md:w-auto">
                         Clear all
                     </SfButton>
                     <SfButton type="submit" className="w-full md:w-auto">
-                        Save and Pay
+                        Save Address
                     </SfButton>
                 </div>
             </form>

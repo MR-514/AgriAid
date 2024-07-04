@@ -2,7 +2,7 @@ import { SfButton, SfIconCheckCircle, SfIconClose, SfInput, SfLink } from "@stor
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
-export default function CartSummary({productsInCart, itemsInCart, totalPrice}) {
+export default function CartSummary({ productsInCart, itemsInCart, totalPrice, shippingAddressEntered, setShippingAddressEntered , disabled }) {
     const errorTimer = useRef(0);
     const positiveTimer = useRef(0);
     const informationTimer = useRef(0);
@@ -106,8 +106,7 @@ export default function CartSummary({productsInCart, itemsInCart, totalPrice}) {
         }
     };
 
-    return (<div>
-        <h1>hello from cart summary</h1>
+    return (<div style={{ padding: 30 }}>
         <div className="md:shadow-lg md:rounded-md md:border md:border-neutral-100">
             <div className="flex justify-between items-end bg-neutral-100 md:bg-transparent py-2 px-4 md:px-6 md:pt-6 md:pb-4">
                 <p className="typography-headline-4 font-bold md:typography-headline-3">Order Summary</p>
@@ -158,7 +157,7 @@ export default function CartSummary({productsInCart, itemsInCart, totalPrice}) {
                     <p>Total</p>
                     <p>{formatPrice(finalAmount())}</p>
                 </div>
-                <SfButton onClick={handleCheckout} size="lg" className="w-full">
+                <SfButton onClick={handleCheckout} size="lg" className="w-full" disabled={!shippingAddressEntered} title={disabled ? "Please set the shipping address first" : ""}>
                     Place Order And Pay
                 </SfButton>
                 <div className="text-xs mt-4 text-center">
@@ -221,6 +220,11 @@ export default function CartSummary({productsInCart, itemsInCart, totalPrice}) {
                         <SfIconClose className="hidden md:block" />
                         <SfIconClose size="sm" className="md:hidden block" />
                     </button>
+                </div>
+            )}
+            {!shippingAddressEntered && (
+                <div className="text-red-600 text-sm mt-2">
+                    Please enter a shipping address before placing an order.
                 </div>
             )}
         </div>
