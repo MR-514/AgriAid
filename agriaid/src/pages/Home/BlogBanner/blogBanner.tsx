@@ -5,25 +5,25 @@ import { format } from "path";
 const BlogBanner = ({ blogStories, language }) => {
   // console.log(blogStories);
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
+  // function formatDate(dateString) {
+  //   const date = new Date(dateString);
     
-    const day = date.getUTCDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getUTCFullYear();
+  //   const day = date.getUTCDate();
+  //   const month = date.toLocaleString('default', { month: 'long' });
+  //   const year = date.getUTCFullYear();
   
-    const daySuffix = (day) => {
-      if (day > 3 && day < 21) return 'th';
-      switch (day % 10) {
-        case 1: return 'st';
-        case 2: return 'nd';
-        case 3: return 'rd';
-        default: return 'th';
-      }
-    };
+  //   const daySuffix = (day) => {
+  //     if (day > 3 && day < 21) return 'th';
+  //     switch (day % 10) {
+  //       case 1: return 'st';
+  //       case 2: return 'nd';
+  //       case 3: return 'rd';
+  //       default: return 'th';
+  //     }
+  //   };
   
-    return `${day}${daySuffix(day)} ${month} ${year}`;
-  }
+  //   return `${day}${daySuffix(day)} ${month} ${year}`;
+  // }
 
   return (
     <>
@@ -103,8 +103,8 @@ const BlogBanner = ({ blogStories, language }) => {
                         left={"10px"}
                       >
                         {/* {stories.date} */}
-                        {/* {stories.publishedDate} */}
-                        {formatDate(stories.publishedDate)}
+                        { language === 'en' ? stories.publishedDate : stories.publishedDate_hin}
+                        {/* {formatDate(stories.publishedDate)} */}
                       </Text>
                     </Box>
                   </Flex>

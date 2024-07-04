@@ -23,7 +23,7 @@ const Blog = () => {
   const [language, setLanguage] = useState("en");
 
   const { loading, error, data } = useBlog();
-  console.log(data?.blogCollection.items);
+  // console.log(data?.blogCollection.items[0].longDescription);
 
   const educationalData = [
     {
@@ -148,13 +148,13 @@ const Blog = () => {
             ? data?.blogCollection.items.map(
                 (data, index) =>
                   hasDiseases(data.name) === true && (
-                    <BlogCard key={index} data={data} language={language}/>
+                    <BlogCard key={index} data={data} language={language} index={index}/>
                   )
               )
             : data?.blogCollection.items.map(
                 (data, index) =>
                   hasDiseases(data.name) === false && (
-                    <BlogCard key={index} data={data} language={language}/>
+                    <BlogCard key={index} data={data} language={language} index={index}/>
                   )
               )}
         </SimpleGrid>
