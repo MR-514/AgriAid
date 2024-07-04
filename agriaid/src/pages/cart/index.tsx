@@ -2,10 +2,11 @@
 
 import { useEffect, useState, ChangeEvent, useRef } from "react";
 import { SfButton, SfIconRemove, SfLink, SfIconAdd, SfIconDelete, SfIconCheckCircle, SfIconClose, SfInput } from '@storefront-ui/react';
-import { clamp } from '@storefront-ui/shared';
 import { useRouter } from "next/navigation";
 import styles from "./cartStyles.module.css"
 import CartDisplay from "./cartDetails"
+import AddressForm from "./shippingAddress";
+import CartSummary from "./cartSummary";
 
 export default function Cart() {
     const [productsInCart, setProductsInCart] = useState([]);
@@ -73,315 +74,57 @@ export default function Cart() {
     };
 
 
+    const [showShippingAddress, setShowShippingAddress] = useState(false);
+    const [showCartDetails, setShowCartDetails] = useState(false);
 
-    const errorTimer = useRef(0);
-    const positiveTimer = useRef(0);
-    const informationTimer = useRef(0);
-    const [inputValue, setInputValue] = useState('');
-    const [promoCode, setPromoCode] = useState(0);
-    const [informationAlert, setInformationAlert] = useState(false);
-    const [positiveAlert, setPositiveAlert] = useState(false);
-    const [errorAlert, setErrorAlert] = useState(false);
-
-    // order Summary related data
-    const orderDetails = {
-        items: itemsInCart,
-        originalPrice: totalPrice,
-        savings: promoCode,
-        delivery: 0.0,
-        tax: 0.0,
+    const handleButtonClick = () => {
+        setShowShippingAddress(true);
+        // setShowCartDetails(false);
     };
 
-    // error alert
-    useEffect(() => {
-        clearTimeout(errorTimer.current);
-        errorTimer.current = window.setTimeout(() => setErrorAlert(false), 1000);
-        return () => {
-            clearTimeout(errorTimer.current);
-        };
-    }, [errorAlert]);
-    // positive alert
-    useEffect(() => {
-        clearTimeout(positiveTimer.current);
-        positiveTimer.current = window.setTimeout(() => setPositiveAlert(false), 1000);
-        return () => {
-            clearTimeout(positiveTimer.current);
-        };
-    }, [positiveAlert]);
-    // information alert
-    useEffect(() => {
-        clearTimeout(informationTimer.current);
-        informationTimer.current = window.setTimeout(() => setInformationAlert(false), 1000);
-        return () => {
-            clearTimeout(informationTimer.current);
-        };
-    }, [informationAlert]);
-
-    const formatPrice = (price: number) =>
-        new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(price);
-
-    const itemsSubtotal = () =>
-        orderDetails.originalPrice + orderDetails.delivery + orderDetails.tax;
-
-    const finalAmount = () => itemsSubtotal() - promoCode;
-
-    // remove promocode
-    const removePromoCode = () => {
-        setPromoCode(0);
-        setInformationAlert(true);
+    const handleClick = () => {
+        // setShowShippingAddress(false);
+        setShowCartDetails(true);
     };
-    // Check coupon code
-    const checkCoupon = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        const customerId = localStorage.getItem("customerId");
-        const total = finalAmount();
-        try {
-            const response = await fetch(`/api/check-coupon`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ coupon: inputValue, customerId, grandTotal: total })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to apply coupon');
-            }
-            const result = await response.json();
-            const { discount_amount, total_amount } = result
-            setPromoCode(discount_amount / 100) //converting cents 
-            setPositiveAlert(true);
-
-        } catch (error) {
-            // console.log('Error applying coupon:', error);
-            setErrorAlert(true);
-
-        }
-    };
-
-    const handleCheckout = async () => {
-        try {
-            const response = await fetch('/api/checkout', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ productsInCart, promoCode }),
-            });
-            const { url } = await response.json();
-            router.push(url);
-        } catch (error) {
-            console.error('Error creating checkout session:', error);
-        }
-    };
-
-
-
     return (
         <>
             <div className={styles.cartContainer}>
                 <div>
-                    <CartDisplay />
                     <p className="font-bold text-2xl">Shopping Bag</p>
                     {productsInCart.length === 0 ? (
                         <p>Your shopping cart is empty.</p>
                     ) : (
-                        <div>
-                            {productsInCart.map((product) => (
-                                <div key={product.id} className="relative flex border-b-[1px] border-neutral-200 hover:shadow-lg min-w-[320px] max-w-[640px] p-4">
-                                    <div className="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
-                                        <SfLink href="#">
-                                            <img
-                                                className="w-full h-auto border rounded-md border-neutral-200"
-                                                src={product.image}
-                                                alt={product.name}
-                                                width="300"
-                                                height="300"
-                                            />
-                                        </SfLink>
-                                    </div>
-                                    <div className="flex flex-col pl-4 min-w-[180px] flex-1">
-                                        <SfLink href="#" variant="secondary" className="font-bold no-underline typography-text-sm sm:typography-text-lg">
-                                            {product.name}
-                                        </SfLink>
-
-                                        <div className="my-2 sm:mb-0">
-                                            <ul className="text-xs font-normal leading-5 sm:typography-text-sm text-neutral-700">
-                                                <li>
-                                                    <span className="mr-1">Unit Price:</span>
-                                                    <span className="font-medium">{product.price.toFixed(2)}</span>
-                                                </li>
-                                            </ul>
-                                        </div>
-
-                                        <div className="items-center sm:mt-auto sm:flex">
-                                            <span className="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg">Rs. {product.totalPrice.toFixed(2)}</span>
-                                            <div className="flex items-center justify-between mt-4 sm:mt-0">
-                                                <div className="flex border border-neutral-300 rounded-md">
-                                                    <SfButton
-                                                        variant="tertiary"
-                                                        square
-                                                        className="rounded-r-none"
-                                                        disabled={product.quantity <= 1}
-                                                        aria-label="Decrease value"
-                                                        onClick={() => handleQuantityChange(product.id, product.quantity - 1)}
-                                                    >
-                                                        <SfIconRemove />
-                                                    </SfButton>
-                                                    <input
-                                                        type="number"
-                                                        role="spinbutton"
-                                                        className="appearance-none mx-2 w-8 text-center bg-transparent font-medium [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-inner-spin-button]:display-none [&::-webkit-inner-spin-button]:m-0 [&::-webkit-outer-spin-button]:display-none [&::-webkit-outer-spin-button]:m-0 [-moz-appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none disabled:placeholder-disabled-900 focus-visible:outline focus-visible:outline-offset focus-visible:rounded-sm"
-                                                        min={1}
-                                                        max={5}
-                                                        value={product.quantity}
-                                                        onChange={(e) => handleQuantityChange(product.id, Number(clamp(e.target.value, 1, 5)))}
-                                                    />
-                                                    <SfButton
-                                                        variant="tertiary"
-                                                        square
-                                                        className="rounded-l-none"
-                                                        disabled={product.quantity >= 5}
-                                                        aria-label="Increase value"
-                                                        onClick={() => handleQuantityChange(product.id, product.quantity + 1)}
-                                                    >
-                                                        <SfIconAdd />
-                                                    </SfButton>
-                                                </div>
-                                                <button
-                                                    aria-label="Remove"
-                                                    type="button"
-                                                    className="text-neutral-500 text-xs font-light ml-auto flex items-center px-3 py-1.5"
-                                                    onClick={() => handleQuantityChange(product.id, 0)}
-                                                >
-                                                    <SfIconDelete />
-                                                    <span className="hidden ml-1.5 sm:block"> Remove </span>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
+                        <>
+                            {showShippingAddress ? (
+                                <>
+                                    <AddressForm />
+                                    <button
+                                        onClick={handleClick}
+                                        className="mt-4 p-2 bg-blue-500 text-white"
+                                    >
+                                        Show cart items
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    {showCartDetails && (
+                                        <>
+                                            <CartDisplay productsInCart={productsInCart} />
+                                            <button
+                                                onClick={handleButtonClick}
+                                                className="mt-4 p-2 bg-blue-500 text-white"
+                                            >
+                                                Enter Shipping Address
+                                            </button>
+                                        </>
+                                    )}
+                                </>
+                            )}
+                        </>
                     )}
                 </div>
                 <div>
-                    <div className="md:shadow-lg md:rounded-md md:border md:border-neutral-100">
-                        <div className="flex justify-between items-end bg-neutral-100 md:bg-transparent py-2 px-4 md:px-6 md:pt-6 md:pb-4">
-                            <p className="typography-headline-4 font-bold md:typography-headline-3">Order Summary</p>
-                            <p className="typography-text-base font-medium">(Items: {orderDetails.items})</p>
-                        </div>
-                        <div className="px-4 pb-4 mt-3 md:px-6 md:pb-6 md:mt-0">
-                            <div className="flex justify-between typography-text-base pb-4">
-                                <div className="flex flex-col grow pr-2">
-                                    <p>Items Subtotal</p>
-                                    {orderDetails.savings > 0 ?
-                                        <p className="typography-text-xs text-secondary-700">Savings</p> : <p></p>}
-                                    <p className="my-2">Delivery</p>
-                                    <p>Estimated Tax</p>
-                                </div>
-                                <div className="flex flex-col text-right">
-                                    <p>{formatPrice(orderDetails.originalPrice)}</p>
-                                    {orderDetails.savings > 0 ? <p className="typography-text-xs text-secondary-700">{formatPrice(orderDetails.savings)}</p> : <p></p>}
-                                    <p className="my-2">{formatPrice(orderDetails.delivery)}</p>
-                                    <p>{formatPrice(orderDetails.tax)}</p>
-                                </div>
-                            </div>
-                            {promoCode ? (
-                                <div className="flex items-center mb-5 py-5 border-y border-neutral-200">
-                                    <p>PromoCode</p>
-                                    <SfButton size="sm" variant="tertiary" className="ml-auto mr-2" onClick={removePromoCode}>
-                                        Remove
-                                    </SfButton>
-                                    <p>{formatPrice(promoCode)}</p>
-                                </div>
-                            ) : (
-                                <form className="flex gap-x-2 py-4 border-y border-neutral-200 mb-4" onSubmit={checkCoupon}>
-                                    <SfInput
-                                        value={inputValue}
-                                        placeholder="Enter promo code"
-                                        wrapperClassName="grow"
-                                        onChange={(event) => setInputValue(event.target.value)}
-                                    />
-                                    <SfButton type="submit" variant="secondary">
-                                        Apply
-                                    </SfButton>
-                                </form>
-                            )}
-                            {orderDetails.savings > 0 ?
-                                <p className="px-3 py-1.5 bg-secondary-100 text-secondary-700 typography-text-sm rounded-md text-center mb-4">
-                                    You are saving ${Math.abs(orderDetails.savings).toFixed(2)} on your order today!
-                                </p> : <p></p>}
-                            <div className="flex justify-between typography-headline-4 md:typography-headline-3 font-bold pb-4 mb-4 border-b border-neutral-200">
-                                <p>Total</p>
-                                <p>{formatPrice(finalAmount())}</p>
-                            </div>
-                            <SfButton onClick={handleCheckout} size="lg" className="w-full">
-                                Place Order And Pay
-                            </SfButton>
-                            <div className="text-xs mt-4 text-center">
-                                By placing my order, you agree to our <SfLink href="#">Terms and Conditions</SfLink> and our{' '}
-                                <SfLink href="#">Privacy Policy.</SfLink>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* message displays */}
-                    <div className="absolute top-0 right-0 mx-2 mt-2 sm:mr-6">
-                        {positiveAlert && (
-                            <div
-                                role="alert"
-                                className="flex items-start md:items-center shadow-md max-w-[600px] bg-positive-100 pr-2 pl-4 mb-2 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
-                            >
-                                <SfIconCheckCircle className="mr-2 my-2 text-positive-700" />
-                                <p className="py-2 mr-2">Your promo code has been added.</p>
-                                <button
-                                    type="button"
-                                    className="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900"
-                                    aria-label="Close positive alert"
-                                    onClick={() => setPositiveAlert(false)}
-                                >
-                                    <SfIconClose className="hidden md:block" />
-                                    <SfIconClose size="sm" className="md:hidden block" />
-                                </button>
-                            </div>
-                        )}
-                        {informationAlert && (
-                            <div
-                                role="alert"
-                                className="flex items-start md:items-center shadow-md max-w-[600px] bg-positive-100 pr-2 pl-4 mb-2 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
-                            >
-                                <SfIconCheckCircle className="mr-2 my-2 text-positive-700" />
-                                <p className="py-2 mr-2">Your promo code has been removed.</p>
-                                <button
-                                    type="button"
-                                    className="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900"
-                                    aria-label="Close positive alert"
-                                    onClick={() => setInformationAlert(false)}
-                                >
-                                    <SfIconClose className="hidden md:block" />
-                                    <SfIconClose size="sm" className="md:hidden block" />
-                                </button>
-                            </div>
-                        )}
-                        {errorAlert && (
-                            <div
-                                role="alert"
-                                className="flex items-start md:items-center max-w-[600px] shadow-md bg-negative-100 pr-2 pl-4 ring-1 ring-negative-300 typography-text-sm md:typography-text-base py-1 rounded-md"
-                            >
-                                <p className="py-2 mr-2">This promo code is not valid.</p>
-                                <button
-                                    type="button"
-                                    className="p-1.5 md:p-2 ml-auto rounded-md text-negative-700 hover:bg-negative-200 active:bg-negative-300 hover:text-negative-800 active:text-negative-900"
-                                    aria-label="Close error alert"
-                                    onClick={() => setErrorAlert(false)}
-                                >
-                                    <SfIconClose className="hidden md:block" />
-                                    <SfIconClose size="sm" className="md:hidden block" />
-                                </button>
-                            </div>
-                        )}
-                    </div>
+                    <CartSummary productsInCart={productsInCart} itemsInCart={itemsInCart} totalPrice={totalPrice} />
                 </div>
             </div>
         </>
