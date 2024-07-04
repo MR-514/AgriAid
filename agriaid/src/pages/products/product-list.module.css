@@ -45,24 +45,26 @@
 
 .productsMainContainer{
     width: 70%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 .searchBoxContainer{
     display: flex;
     width: 100%;
-    /* border: 2px solid red; */
+    align-items: center;
+    gap: 10px;
 }
-.searchBoxContainer:first-child{
-    width: 20%;
-}
-.searchBox{
-    margin: 10px 5px;
-    width: 80%;
+.searchBoxContainer>:first-child{
+    font-size: 20px;
+    font-weight: bold;
 }
 
 .searchBox>form>input{
     border: 2px solid rgba(25, 33, 50,0.5);
     padding: 8px;
     border-radius: 5px;
+    width: 500px;
 }
 .searchBox>form>button{
     display: none;
