@@ -100,7 +100,7 @@ const Header: FC = () => {
 
             <FaGreaterThan color={LIGHT_GREY_COLOR} />
             <Link
-              href="/"
+              href="/products"
               mx="2"
               color={GREY_COLOR}
               fontSize="17px"
@@ -143,7 +143,7 @@ const Header: FC = () => {
             >
               <FaUser />
               <Link
-                href="#"
+                href="/login"
                 mx="5"
                 textDecoration={"none"}
                 color={BORDER_COLOR}
@@ -154,7 +154,7 @@ const Header: FC = () => {
             </Flex>
             <Text mx="5">|</Text>
             <Link
-              href="#"
+              href="/register"
               mx="5"
               textDecoration={"none"}
               color={BORDER_COLOR}
