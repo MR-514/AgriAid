@@ -1,0 +1,24 @@
+import  {getCartData, updateLineItems } from "./cartoperations";
+
+
+export default async function handler(req, res) {
+    try {
+        if (req.method === "GET") {
+            const response = await getCartData(req);
+            const result =await  response.json()
+            res.status(response.status).json(result);
+        } else if (req.method === "POST") {
+            // Handle POST request
+            const response = await updateLineItems(req);
+            const result =await  response.json()
+            res.status(response.status).send({message :"Item Added Successfully"});
+        } else {
+            // Handle unsupported methods
+            res.setHeader("Allow", ["GET", "POST"]);
+            res.status(405).end(`Method ${req.method} Not Allowed`);
+        }
+    } catch (error) {
+        console.error("API error:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}

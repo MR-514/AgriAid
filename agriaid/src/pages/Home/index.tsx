@@ -18,7 +18,7 @@ const Landingpage = () => {
 
   return (
     <>
-        <Header />
+        {/* <Header /> */}
         <Flex justifyContent={'end'}>
             <Button
             pl="0px"
@@ -56,7 +56,7 @@ const Landingpage = () => {
             blogStories={data?.landingPageCollection.items[0].blogsPreview}
             language={language}
         />
-        <Footer />
+        {/* <Footer /> */}
     </>
   );
 };

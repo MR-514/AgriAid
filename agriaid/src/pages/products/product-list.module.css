@@ -1,0 +1,107 @@
+.productListMainContainer{
+    display: flex;
+    margin: 5px 20px;
+    justify-content: space-between;
+    background-color: rgb(250, 251, 252);
+}
+.filterContainer{
+    width: 25%;
+    outline: 1px solid rgb(188, 182, 182);
+
+}
+.filterContainer>h1{
+    padding: 5px;
+    font-weight: bold;
+    font-size: 20px;
+}
+.individualFilter{
+    border: 1px solid rgb(132, 130, 130);
+    margin: 10px;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.individualFilter>h1{
+    font-weight: bold;
+}
+
+.filterResults>ul>li>label{
+    padding: 2px 10px;
+    display: flex;
+}
+.filterResults>ul>li>label>:first-child{
+    width: 10%;
+    margin-right: 5px;
+}
+.filterResults>ul>li>label>:nth-child(2){
+    width: 60%;
+}
+.filterResults>ul>li>label>:last-child{
+    /* width: 60%; */
+    border-radius: 5px;
+    padding: 5px;
+    background: rgba(197, 218, 240,0.5);
+}
+
+.productsMainContainer{
+    width: 70%;
+}
+.searchBoxContainer{
+    display: flex;
+    width: 100%;
+    /* border: 2px solid red; */
+}
+.searchBoxContainer:first-child{
+    width: 20%;
+}
+.searchBox{
+    margin: 10px 5px;
+    width: 80%;
+}
+
+.searchBox>form>input{
+    border: 2px solid rgba(25, 33, 50,0.5);
+    padding: 8px;
+    border-radius: 5px;
+}
+.searchBox>form>button{
+    display: none;
+}
+
+/* product list styles */
+.productListgrid>div>ol{
+display: flex;
+flex-wrap: wrap;
+}
+/* ordered list from product hit */
+.productListgrid>div>ol>li{
+    width: fit-content;
+}
+.productlistContainer{
+    margin: 5px;
+}
+.productCard{
+    width: 280px;
+    height: 550px;
+    display: flex;
+    flex-direction: column;
+}
+.productImage{
+    margin: 5px;
+}
+.productData{
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* styles for pagination */
+
+.pagination>ul{
+    display: flex;
+    flex-direction: row;
+}
+.pagination>ul>li{
+    margin: 0px 5px;
+}

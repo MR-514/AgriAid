@@ -1,3 +1,5 @@
+import withTM from "next-transpile-modules";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -6,4 +8,4 @@ const nextConfig = {
   },
 };
 
-export default nextConfig;
+export default withTM(["react-use", "@storefront-ui/react"])(nextConfig);
