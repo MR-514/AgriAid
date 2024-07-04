@@ -26,14 +26,25 @@ import { useHeader } from "./header.hooks";
 const Header: FC = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [menuIcon, setMenuIcon] = useState(true);
+  const [isLoggedIn, setIsLoggedIn] = useState('');
+  useEffect(() => {
+    const storedLoggedIn = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(storedLoggedIn);
+  });
 
-  const {loading, error, data} = useHeader();
-//   console.log(data.headerCollection.items[0].logo.image[0].url);
+  const { loading, error, data } = useHeader();
+    // console.log(data.headerCollection.items[0].logo.image[0].url);
 
   const handleToggle = () => {
     onToggle();
     setMenuIcon(!menuIcon);
   };
+
+  const handleLogout = () => {
+    localStorage.setItem('isLoggedIn', 'false');
+    const storedLoggedIn = localStorage.getItem('isLoggedIn');
+    setIsLoggedIn(storedLoggedIn)
+  }
 
   const [isDrawerOpen, setDrawer] = useState(false);
 
@@ -87,7 +98,7 @@ const Header: FC = () => {
           </Box>
 
           <Flex as="nav" align="center">
-          <Link
+            <Link
               href="/"
               mx="2"
               color={GREY_COLOR}
@@ -135,35 +146,57 @@ const Header: FC = () => {
         </Flex>
 
         <Flex gap={"100px"}>
-          <Flex align={"center"}>
-            <Flex
-              _hover={{ color: BORDER_COLOR, textDecoration: "underline" }}
-              align={"center"}
-              gap={"5"}
-            >
-              <FaUser />
+          {isLoggedIn !== "true" ? (
+            <Flex align={"center"}>
+              <Flex
+                _hover={{ color: BORDER_COLOR, textDecoration: "underline" }}
+                align={"center"}
+                gap={"5"}
+              >
+                <FaUser />
+                <Link
+                  href="/login"
+                  mx="5"
+                  textDecoration={"none"}
+                  color={BORDER_COLOR}
+                  fontSize={"17px"}
+                >
+                  Login
+                </Link>
+              </Flex>
+              <Text mx="5">|</Text>
               <Link
-                href="/login"
+                href="/register"
                 mx="5"
                 textDecoration={"none"}
                 color={BORDER_COLOR}
                 fontSize={"17px"}
+                _hover={{ textDecoration: "underline" }}
               >
-                Login
+                Register
               </Link>
             </Flex>
-            <Text mx="5">|</Text>
-            <Link
-              href="/register"
-              mx="5"
-              textDecoration={"none"}
-              color={BORDER_COLOR}
-              fontSize={"17px"}
-              _hover={{ textDecoration: "underline" }}
-            >
-              Register
-            </Link>
-          </Flex>
+          ) :
+          (
+            <Flex
+                _hover={{ color: BORDER_COLOR, textDecoration: "underline" }}
+                align={"center"}
+                gap={"5"}
+                cursor={'pointer'}
+              >
+                <FaUser />
+                <Text
+                  mx="5"
+                  textDecoration={"none"}
+                  color={BORDER_COLOR}
+                  fontSize={"17px"}
+                  onClick={handleLogout}
+                >
+                  Logout
+                </Text>
+              </Flex>
+          )
+          }
 
           <Flex align={"center"} gap={"25px"}>
             <Box pos={"relative"}>
@@ -221,15 +254,23 @@ const Header: FC = () => {
                   />
                 </Flex>
               </MenuButton>
-              <MenuList mt={'-10px'} border="0.5px solid gray" borderRadius="5px">
-                <NextLink href="/blog" passHref style={{ textDecoration:'none' }}>
+              <MenuList
+                mt={"-10px"}
+                border="0.5px solid gray"
+                borderRadius="5px"
+              >
+                <NextLink
+                  href="/blog"
+                  passHref
+                  style={{ textDecoration: "none" }}
+                >
                   <MenuItem
                     onClick={() => console.log("Navigate to Blog")}
                     _hover={{ bg: "#D3D3D3" }}
                     padding="10px"
                     color={"black"}
                     textDecoration="none"
-                    cursor={'pointer'}
+                    cursor={"pointer"}
                     // borderBottom={"0.5px solid rgb(200, 200, 200)"}
                     // borderRadius={"5px"}
                   >
@@ -240,8 +281,8 @@ const Header: FC = () => {
                   onClick={() => console.log("Navigate to Contact Us")}
                   _hover={{ bg: "#D3D3D3" }}
                   padding="10px"
-                  cursor={'pointer'}
-                //   borderRadius={"5px"}
+                  cursor={"pointer"}
+                  //   borderRadius={"5px"}
                 >
                   Contact Us
                 </MenuItem>

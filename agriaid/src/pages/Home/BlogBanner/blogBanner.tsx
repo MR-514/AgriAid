@@ -1,29 +1,30 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { color } from "framer-motion";
 import { format } from "path";
+import Link from "next/link";
 
 const BlogBanner = ({ blogStories, language }) => {
   // console.log(blogStories);
 
-  function formatDate(dateString) {
-    const date = new Date(dateString);
+  // function formatDate(dateString) {
+  //   const date = new Date(dateString);
     
-    const day = date.getUTCDate();
-    const month = date.toLocaleString('default', { month: 'long' });
-    const year = date.getUTCFullYear();
+  //   const day = date.getUTCDate();
+  //   const month = date.toLocaleString('default', { month: 'long' });
+  //   const year = date.getUTCFullYear();
   
-    const daySuffix = (day) => {
-      if (day > 3 && day < 21) return 'th';
-      switch (day % 10) {
-        case 1: return 'st';
-        case 2: return 'nd';
-        case 3: return 'rd';
-        default: return 'th';
-      }
-    };
+  //   const daySuffix = (day) => {
+  //     if (day > 3 && day < 21) return 'th';
+  //     switch (day % 10) {
+  //       case 1: return 'st';
+  //       case 2: return 'nd';
+  //       case 3: return 'rd';
+  //       default: return 'th';
+  //     }
+  //   };
   
-    return `${day}${daySuffix(day)} ${month} ${year}`;
-  }
+  //   return `${day}${daySuffix(day)} ${month} ${year}`;
+  // }
 
   return (
     <>
@@ -50,22 +51,24 @@ const BlogBanner = ({ blogStories, language }) => {
               <Text fontWeight={"bold"} mb={"10px"}>
                 Insights and trends from the agri-tech industry.
               </Text>
-              <Button
-                pl="0px"
-                w="200px"
-                bg="red"
-                p="10px"
-                color="white"
-                border={'none'}
-                borderRadius="5px"
-                mt="10px"
-                _hover={{ bg: "#DC143C" }}
-                cursor={'pointer'}
-              >
-                {/* VIEW MORE */}
-                {language === 'en' ? blogStories?.blogReference.microcopy.name : blogStories?.blogReference.microcopy.name_hi}
-                {/* {blogStories?.blogReference.microcopy.name} */}
-              </Button>
+              <Link href={'/blog'} passHref>
+                <Button
+                  pl="0px"
+                  w="200px"
+                  bg="red"
+                  p="10px"
+                  color="white"
+                  border={'none'}
+                  borderRadius="5px"
+                  mt="10px"
+                  _hover={{ bg: "#DC143C" }}
+                  cursor={'pointer'}
+                >
+                  {/* VIEW MORE */}
+                  {language === 'en' ? blogStories?.blogReference.microcopy.name : blogStories?.blogReference.microcopy.name_hi}
+                  {/* {blogStories?.blogReference.microcopy.name} */}
+                </Button>
+              </Link>
             </Flex>
           </Box>
 
@@ -103,8 +106,8 @@ const BlogBanner = ({ blogStories, language }) => {
                         left={"10px"}
                       >
                         {/* {stories.date} */}
-                        {/* {stories.publishedDate} */}
-                        {formatDate(stories.publishedDate)}
+                        { language === 'en' ? stories.publishedDate : stories.publishedDate_hin}
+                        {/* {formatDate(stories.publishedDate)} */}
                       </Text>
                     </Box>
                   </Flex>

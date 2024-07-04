@@ -10,7 +10,7 @@ import { FaLanguage } from "react-icons/fa";
 
 const Landingpage = () => {
   const { loading, error, data } = useHomePage();
-  console.log(data);
+//   console.log(data);
   const [language, setLanguage] = useState("en");
 
   if (loading) return <div>Loading...</div>;

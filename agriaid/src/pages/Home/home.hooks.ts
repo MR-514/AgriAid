@@ -36,6 +36,7 @@ const GET_CONTENT = gql`
               shortDescription(locale: "en-US")
               shortDescription_hi: shortDescription(locale: "hi")
               publishedDate
+              publishedDate_hin:publishedDate(locale:"hi")
             }
           }
         }

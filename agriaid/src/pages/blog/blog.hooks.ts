@@ -9,6 +9,9 @@ const GET_CONTENT = gql`
         shortDescription(locale: "en-US")
         shortDescription_hin: shortDescription(locale: "hi")
         publishedDate
+        publishedDate_hin:publishedDate(locale:"hi")
+        duration(locale: "en-US")
+        duration_hin:duration(locale: "hi")
         longDescription(locale: "en-US") {
           json
         }
