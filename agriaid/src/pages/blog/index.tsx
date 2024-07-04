@@ -73,7 +73,7 @@ const Blog = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <Container
         w={"90%"}
         alignItems={"center"}
@@ -159,7 +159,7 @@ const Blog = () => {
               )}
         </SimpleGrid>
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

@@ -1,6 +1,7 @@
 import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { color } from "framer-motion";
 import { format } from "path";
+import Link from "next/link";
 
 const BlogBanner = ({ blogStories, language }) => {
   // console.log(blogStories);
@@ -50,22 +51,24 @@ const BlogBanner = ({ blogStories, language }) => {
               <Text fontWeight={"bold"} mb={"10px"}>
                 Insights and trends from the agri-tech industry.
               </Text>
-              <Button
-                pl="0px"
-                w="200px"
-                bg="red"
-                p="10px"
-                color="white"
-                border={'none'}
-                borderRadius="5px"
-                mt="10px"
-                _hover={{ bg: "#DC143C" }}
-                cursor={'pointer'}
-              >
-                {/* VIEW MORE */}
-                {language === 'en' ? blogStories?.blogReference.microcopy.name : blogStories?.blogReference.microcopy.name_hi}
-                {/* {blogStories?.blogReference.microcopy.name} */}
-              </Button>
+              <Link href={'/blog'} passHref>
+                <Button
+                  pl="0px"
+                  w="200px"
+                  bg="red"
+                  p="10px"
+                  color="white"
+                  border={'none'}
+                  borderRadius="5px"
+                  mt="10px"
+                  _hover={{ bg: "#DC143C" }}
+                  cursor={'pointer'}
+                >
+                  {/* VIEW MORE */}
+                  {language === 'en' ? blogStories?.blogReference.microcopy.name : blogStories?.blogReference.microcopy.name_hi}
+                  {/* {blogStories?.blogReference.microcopy.name} */}
+                </Button>
+              </Link>
             </Flex>
           </Box>
 
