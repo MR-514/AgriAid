@@ -11,7 +11,7 @@ export default async function handler(req, res) {
             // Handle POST request
             const response = await updateLineItems(req);
             const result =await  response.json()
-            res.status(response.status).send({message :"Item Added Successfully"});
+            res.status(response.status).send({message :"Item Added to Cart."});
         } else {
             // Handle unsupported methods
             res.setHeader("Allow", ["GET", "POST"]);
