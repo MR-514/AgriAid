@@ -12,60 +12,54 @@ const index = client.initIndex("agriAid");
 
 
 export default function ProductList() {
-    const [productId, setProductId] = useState('')
-    const [sku, setSku] = useState('')
-    const [quantity, setQuantity] = useState(1)
-    const [variantId, setVariantId] = useState('')
+    const [productId, setProductId] = useState('');
+    const [sku, setSku] = useState('');
+    const [quantity, setQuantity] = useState(1);
+    const [variantId, setVariantId] = useState('');
     const [informationAlert, setInformationAlert] = useState(false);
-    const [addToCartResponse, setAddToCartResponse] = useState('')
+    const [addToCartResponse, setAddToCartResponse] = useState('');
     const informationTimer = useRef(0);
 
-
     const handleClick = async (productData: any) => {
-        // console.log(productData)
-        setProductId(productData.productID)
-        setSku(productData.sku)
-        setVariantId(productData.objectID.split('.').pop())
-        await new Promise(resolve => setTimeout(resolve, 0));
-        await addToCart()
-    }
+        setProductId(productData.productID);
+        setSku(productData.sku);
+        setVariantId(productData.objectID.split('.').pop());
+        await addToCart(productData.sku);
+    };
 
-    // add to cart button
-    const addToCart = async () => {
+    const addToCart = async (sku) => {
         const customerId = localStorage.getItem("customerId");
-        // console.log(customerId)
-
         if (!customerId) {
-            alert("Customer not found . Please log in.");
+            alert("Customer not found. Please log in.");
             return;
         }
         try {
-            const productData = {
-                customerId, productId, variantId, quantity, sku
-            }
-            // console.log("product data in post request", productData)
+            const productData = { customerId, productId, variantId, quantity, sku };
+            console.log("sssssssss", productId, variantId, sku)
             const response = await fetch(`/api/cart/${customerId}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(productData)
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(productData),
             });
-            const result = await response.json()
+            const result = await response.json();
             if (response.status === 200) {
-                setAddToCartResponse(result.message)
+                setAddToCartResponse(result.message);
                 setInformationAlert(true);
-
+                console.log("Alert set to true");
             }
         } catch (error) {
             console.log("Error adding product to cart:", error);
         }
     };
 
-    // information alert
     useEffect(() => {
-        clearTimeout(informationTimer.current);
-        informationTimer.current = window.setTimeout(() => setInformationAlert(false), 1000);
+        if (informationAlert) {
+            clearTimeout(informationTimer.current);
+            informationTimer.current = window.setTimeout(() => {
+                setInformationAlert(false);
+                console.log("Alert set to false"); // Log to check state change
+            }, 5000);
+        }
         return () => {
             clearTimeout(informationTimer.current);
         };
@@ -95,11 +89,9 @@ export default function ProductList() {
                             <SfIconFavorite size="sm" />
                         </SfButton>
                     </div>
-
                     <div className={`p-4 border-t border-neutral-200 ${styles.productData}`}>
                         <div className="flex items-center pt-1">
                             <SfRating size="xs" value={5} max={5} />
-
                             <SfLink href="#" variant="secondary" className="pl-1 no-underline">
                                 <SfCounter size="xs">{5}</SfCounter>
                             </SfLink>
@@ -107,27 +99,22 @@ export default function ProductList() {
                         <SfLink href={`/product/${hit.objectID}`} variant="secondary" className={`no-underline ${styles.productName}`}>
                             {hit.name["en-US"]}
                         </SfLink>
-
-
-
                         <p className="block py-2 font-normal typography-text-sm text-neutral-700">
                             Brand : {hit.attributes.Brand}
                         </p>
-                        {
-
-                        }
-                        {hit.attributes.Quantity ?
-                            (<p className="block py-2 font-normal typography-text-sm text-neutral-700">
+                        {hit.attributes.Quantity ? (
+                            <p className="block py-2 font-normal typography-text-sm text-neutral-700">
                                 Quantity : {hit.attributes.Quantity}
-                            </p>)
-                            : hit.attributes.PowerSource ?
-                                (<p className="block py-2 font-normal typography-text-sm text-neutral-700"> Power Source : {hit.attributes.PowerSource}
-                                </p>)
-                                : hit.attributes.type ?
-                                    (<p className="block py-2 font-normal typography-text-sm text-neutral-700">Type : {hit.attributes.type}
-                                    </p>) : null
-                        }
-
+                            </p>
+                        ) : hit.attributes.PowerSource ? (
+                            <p className="block py-2 font-normal typography-text-sm text-neutral-700">
+                                Power Source : {hit.attributes.PowerSource}
+                            </p>
+                        ) : hit.attributes.type ? (
+                            <p className="block py-2 font-normal typography-text-sm text-neutral-700">
+                                Type : {hit.attributes.type}
+                            </p>
+                        ) : null}
                         <span className="block pb-2 font-bold typography-text-lg">Rs. {(hit.prices.USD["min"])}</span>
                         <SfButton size="sm" slotPrefix={<SfIconShoppingCart size="sm" />} onClick={() => handleClick(hit)}>
                             Add to cart
@@ -135,68 +122,59 @@ export default function ProductList() {
                     </div>
                 </div>
             </div>
-        )
+        );
     }
 
-    return <>
-        <InstantSearch indexName="agriAid" searchClient={client}>
-            <main className={styles.productListMainContainer}>
-
-                <div className={styles.filterContainer}>
-                    <h1><SfIconChevronRight /> Filters</h1>
-                    <div className={styles.individualFilter}>
-                        <h1>Filter by Type</h1>
-                        <RefinementList attribute="attributes.type" className={`refinementlist-style count-button ${styles.filterResults}`} />
-
+    return (
+        <>
+            <InstantSearch indexName="agriAid" searchClient={client}>
+                <main className={styles.productListMainContainer}>
+                    <div className={styles.filterContainer}>
+                        <h1><SfIconChevronRight /> Filters</h1>
+                        <div className={styles.individualFilter}>
+                            <h1>Filter by Type</h1>
+                            <RefinementList attribute="attributes.type" className={`refinementlist-style count-button ${styles.filterResults}`} />
+                        </div>
+                        <div className={styles.individualFilter}>
+                            <h1>Filter by Category</h1>
+                            <RefinementList attribute="categories.en-US.lvl0" className={`refinementlist-style count-button ${styles.filterResults}`} />
+                        </div>
+                        <div className={styles.individualFilter}>
+                            <h1>Filter by Sub-Category</h1>
+                            <RefinementList attribute="categoryKeys.en-US" className={`refinementlist-style count-button ${styles.filterResults}`} />
+                        </div>
                     </div>
-                    <div className={styles.individualFilter}>
-                        <h1>Filter by Category</h1>
-                        <RefinementList attribute="categories.en-US.lvl0" className={`refinementlist-style count-button ${styles.filterResults}`} />
-
+                    <div className={styles.productsMainContainer}>
+                        <div className={styles.searchBoxContainer}>
+                            <p>Search for Products</p>
+                            <SearchBox className={styles.searchBox} />
+                        </div>
+                        <div className={styles.productListgrid}>
+                            <Hits hitComponent={Hit} />
+                        </div>
+                        <Pagination className={styles.pagination} />
                     </div>
-                    <div className={styles.individualFilter}>
-                        <h1>Filter by Sub-Category</h1>
-                        <RefinementList attribute="categoryKeys.en-US" className={`refinementlist-style count-button ${styles.filterResults}`} />
-
-                    </div>
-
-                </div>
-                <div className={styles.productsMainContainer}>
-                    <div className={styles.searchBoxContainer}>
-                        <div>Search</div>
-                        <SearchBox className={styles.searchBox} />
-                    </div>
-
-                    <div className={styles.productListgrid}>
-                        <Hits hitComponent={Hit} />
-                    </div>
-                    <Pagination className={styles.pagination} />
-
-
-                </div>
-            </main>
-
-        </InstantSearch>
-        <div className="absolute top-0 right-0 mx-2 mt-2 sm:mr-6">
-            {informationAlert && (
-                <div
+                </main>
+            </InstantSearch>
+            <div style={{ position: "fixed", top: 0, right: 0 }}>
+                {informationAlert ? <div
                     role="alert"
-                    className="flex items-start md:items-center shadow-md max-w-[600px] bg-positive-100 pr-2 pl-4 mb-2 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
+                    className="flex items-start md:items-center max-w-[600px] shadow-md bg-positive-100 pr-2 pl-4 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
                 >
-                    <SfIconCheckCircle className="mr-2 my-2 text-positive-700" />
-                    <p className="py-2 mr-2">{addToCartResponse}</p>
+                    <SfIconCheckCircle className="my-2 mr-2 text-positive-700 shrink-0" />
+                    <p className="py-2 mr-2">The product has been added to the cart.</p>
                     <button
-                        type="button"
-                        className="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900"
-                        aria-label="Close positive alert"
                         onClick={() => setInformationAlert(false)}
+                        type="button"
+                        className="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900 focus-visible:outline focus-visible:outline-offset"
+                        aria-label="Close positive alert"
                     >
                         <SfIconClose className="hidden md:block" />
-                        <SfIconClose size="sm" className="md:hidden block" />
+                        <SfIconClose size="sm" className="block md:hidden" />
                     </button>
-                </div>
-            )}
-        </div>
+                </div> : <></>}
+            </div>
 
-    </>
+        </>
+    );
 }
