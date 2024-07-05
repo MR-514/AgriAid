@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import styles from "./cartStyles.module.css";
 import CartDisplay from "./cartDetails";
 import AddressForm from "./shippingAddress";
@@ -9,24 +9,23 @@ import {
   SfButton,
   SfIconCheckCircle,
   SfIconClose,
-  SfSwitch,
 } from "@storefront-ui/react";
 import classNames from "classnames";
 import EmptyCart from "./emptyCart";
 import Image from "next/image";
 
 export default function Cart() {
-  const [productsInCart, setProductsInCart] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-  const [itemsInCart, setItemsInCart] = useState(0);
-  const [showShippingAddress, setShowShippingAddress] = useState(false);
-  const [showCartDetails, setShowCartDetails] = useState(true);
-  const [shippingAddressEntered, setShippingAddressEntered] = useState(false);
-  const [checkedState, setCheckedState] = useState(false);
-  const [informationAlert, setInformationAlert] = useState(false);
-  const [removeMessage, setRemoveMessage] = useState("");
-  const [itemDeleted, setItemDeleted] = useState(false);
-  const informationTimer = useRef(0);
+  const [productsInCart, setProductsInCart] = useState<any[]>([]);
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [itemsInCart, setItemsInCart] = useState<number>(0);
+  const [showShippingAddress, setShowShippingAddress] = useState<boolean>(false);
+  const [showCartDetails, setShowCartDetails] = useState<boolean>(true);
+  const [shippingAddressEntered, setShippingAddressEntered] = useState<boolean>(false);
+  const [checkedState, setCheckedState] = useState<boolean>(false);
+  const [informationAlert, setInformationAlert] = useState<boolean>(false);
+  const [removeMessage, setRemoveMessage] = useState<string>("");
+  const [itemDeleted, setItemDeleted] = useState<boolean>(false);
+  const informationTimer = useRef<number>(0);
 
   // Fetching cart details
   const fetchCartData = useCallback(async () => {
@@ -46,14 +45,15 @@ export default function Cart() {
     } catch (error) {
       console.error("Error Fetching Cart Details", error);
     }
-  }, [extractVariantDetails]);
+  }, []);
+
   useEffect(() => {
     fetchCartData();
   }, [fetchCartData, itemDeleted]);
 
   // Extracting line items in cart
-  const extractVariantDetails = (data) => {
-    return data.map((item) => {
+  const extractVariantDetails = (data: any[]): any[] => {
+    return data.map((item: any) => {
       const { name, variant, price, quantity, totalPrice, id } = item;
       const variantName = name["en-US"];
       const variantPrice = variant.prices[0].value.centAmount;
@@ -75,7 +75,7 @@ export default function Cart() {
   };
 
   // remove line item from cart
-  const removeLineItem = async (id, quantity) => {
+  const removeLineItem = async (id: string, quantity: number) => {
     const customerId = localStorage.getItem("customerId");
     const response = await fetch(`/api/cart/${customerId}`, {
       method: "DELETE",
@@ -139,6 +139,7 @@ export default function Cart() {
       buttonText: "Set Address",
     },
   ];
+
   return (
     <>
       <div
@@ -232,9 +233,7 @@ export default function Cart() {
               <SfIconClose size="sm" className="block md:hidden" />
             </button>
           </div>
-        ) : (
-          <></>
-        )}
+        ) : null}
       </div>
     </>
   );

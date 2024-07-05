@@ -7,13 +7,37 @@ import {
 } from "@storefront-ui/react";
 import Image from "next/image";
 
-export default function CartDisplay({ productsInCart ,removeItem}) {
-  const updateCart = (id,quantity) => {
-    removeItem(id,quantity)
+interface Product {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: string;
+  totalPrice: number;
+  lineItemId: string;
+}
+
+interface CartDisplayProps {
+  productsInCart: Product[];
+  removeItem: (id: string, quantity: number) => void;
+}
+
+export default function CartDisplay({ productsInCart, removeItem }: CartDisplayProps) {
+  const updateCart = (id: string, quantity: number) => {
+    removeItem(id, quantity);
   }
+
+  const handleQuantityChange = (id: string, quantity: number) => {
+    // Handle quantity change logic here
+  };
+
+  const clamp = (value: number, min: number, max: number): number => {
+    return Math.min(Math.max(value, min), max);
+  }
+
   return (
     <>
-      <div className="border border-gray-300 rounded-lg shadow-lg " style={{ maxWidth: 800, padding: 30 }}>
+      <div className="border border-gray-300 rounded-lg shadow-lg" style={{ maxWidth: 800, padding: 30 }}>
         <p className="font-bold text-2xl">Shopping Bag</p>
 
         {productsInCart.map((product) => (
@@ -64,9 +88,7 @@ export default function CartDisplay({ productsInCart ,removeItem}) {
                       className="rounded-r-none"
                       disabled={product.quantity <= 1}
                       aria-label="Decrease value"
-                      // onClick={() =>
-                      //   handleQuantityChange(product.id, product.quantity - 1)
-                      // }
+                      onClick={() => handleQuantityChange(product.id, product.quantity - 1)}
                     >
                       <SfIconRemove />
                     </SfButton>
@@ -80,7 +102,7 @@ export default function CartDisplay({ productsInCart ,removeItem}) {
                       onChange={(e) =>
                         handleQuantityChange(
                           product.id,
-                          Number(clamp(e.target.value, 1, 5))
+                          Number(clamp(Number(e.target.value), 1, 5))
                         )
                       }
                     />
@@ -90,9 +112,7 @@ export default function CartDisplay({ productsInCart ,removeItem}) {
                       className="rounded-l-none"
                       disabled={product.quantity >= 5}
                       aria-label="Increase value"
-                      // onClick={() =>
-                      //   handleQuantityChange(product.id, product.quantity + 1)
-                      // }
+                      onClick={() => handleQuantityChange(product.id, product.quantity + 1)}
                     >
                       <SfIconAdd />
                     </SfButton>
