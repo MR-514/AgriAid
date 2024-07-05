@@ -4,7 +4,7 @@ const secretKey = "sk_test_51PY2lLRtmjIVTrIerWt2zzkKVw4MEIraUdfqaEKwiIW5Hmoy8jHO
 
 const stripe = new Stripe(secretKey);
 
-export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
@@ -27,8 +27,8 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         let sessionParams: Stripe.Checkout.SessionCreateParams = {
             line_items,
             mode: 'payment',
-            success_url: 'http://localhost:3000/success',
-            cancel_url: 'http://localhost:3000/cart',
+            success_url: 'ttps://agri-aid-1001001.vercel.app/success',
+            cancel_url: 'ttps://agri-aid-1001001.vercel.app/cart',
         };
 
         // Create a coupon programmatically - to handle discounted amount

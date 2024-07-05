@@ -4,7 +4,7 @@ export default async function handler(req, res) {
 
     if (req.method === 'GET') {
         const { customerId } = req.query;
-        console.log("rrrrrrrrrrrrrr", customerId)
+        // console.log("rrrrrrrrrrrrrr", customerId)
         try {
             // Fetch cart data using ctpClient
             const response = await ctpClient.execute({
