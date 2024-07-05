@@ -3,7 +3,7 @@ import useBlog from "./blog.hooks";
 import { createClient } from 'contentful';
     import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
-const blogDetails = () => {
+const BlogDetails = () => {
     const router = useRouter();
     // console.log(router.query.id);
     const { loading, error, data } = useBlog();
@@ -27,4 +27,4 @@ const blogDetails = () => {
     )
 }
 
-export default blogDetails;
+export default BlogDetails;
