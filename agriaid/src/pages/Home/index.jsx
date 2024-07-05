@@ -1,5 +1,5 @@
 import Header from "../Header/header";
-import useHomePage from "./home.hooks";
+import useHomePage from "../../customHooks/home.hooks";
 import HeroBanner from "./HeroBanner/heroBanner";
 import SubBanner from "./SubBanner/subBanner";
 import BlogBanner from "./BlogBanner/blogBanner";

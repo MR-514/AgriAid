@@ -15,7 +15,7 @@ import Header from "../Header/header";
 import BlogCard from "./blogCard";
 import Footer from "../Footer/footer";
 import { useEffect, useState } from "react";
-import useBlog from "./blog.hooks";
+import useBlog from "../../customHooks/blog.hooks";
 import { FaLanguage } from "react-icons/fa";
 
 const Blog = () => {

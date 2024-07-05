@@ -26,6 +26,7 @@ const BlogCard = ({ data, language, index }) => {
       >
         <Flex direction="column" m={"1px auto"}>
           <Image
+            alt="image"
             className="hoverImage"
             // src={data.img}
             src={data?.blog_images.items[0].image[0].url}
@@ -47,8 +48,14 @@ const BlogCard = ({ data, language, index }) => {
               {language === "en" ? data.duration : data.duration_hin}
             </Text>
           </Flex>
-          <Flex alignItems={'center'} gap={'10px'} mb={'15px'}> 
-            <Image src={data?.author.image[0].url} w="50px" h="50px" borderRadius={'50%'}/>
+          <Flex alignItems={"center"} gap={"10px"} mb={"15px"}>
+            <Image
+              alt="image"
+              src={data?.author.image[0].url}
+              w="50px"
+              h="50px"
+              borderRadius={"50%"}
+            />
             <Text>{data?.author.name}</Text>
           </Flex>
           <Text fontSize="1.2rem">
@@ -60,17 +67,17 @@ const BlogCard = ({ data, language, index }) => {
               : data.shortDescription_hin}
           </Text>
           {/* <Link href={`/blog/${index}`} passHref> */}
-            <Flex
-              alignItems={"center"}
-              color={"red"}
-              position={"absolute"}
-              right={"15px"}
-              bottom={"1px"}
-              mb={"10px"}
-            >
-              <Text>Read more</Text>
-              <FaAngleRight />
-            </Flex>
+          <Flex
+            alignItems={"center"}
+            color={"red"}
+            position={"absolute"}
+            right={"15px"}
+            bottom={"1px"}
+            mb={"10px"}
+          >
+            <Text>Read more</Text>
+            <FaAngleRight />
+          </Flex>
           {/* </Link> */}
         </Flex>
       </Box>

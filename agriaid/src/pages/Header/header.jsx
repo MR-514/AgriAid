@@ -21,19 +21,19 @@ import { HamburgerIcon, CloseIcon, SearchIcon } from "@chakra-ui/icons";
 import { FaUser } from "react-icons/fa";
 import { FaGreaterThan } from "react-icons/fa6";
 import { RiShoppingBagLine } from "react-icons/ri";
-import { useHeader } from "./header.hooks";
+import { useHeader } from "../../customHooks/header.hooks";
 
 const Header = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [menuIcon, setMenuIcon] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState("");
   useEffect(() => {
-    const storedLoggedIn = localStorage.getItem('isLoggedIn');
+    const storedLoggedIn = localStorage.getItem("isLoggedIn");
     setIsLoggedIn(storedLoggedIn);
   });
 
   const { loading, error, data } = useHeader();
-    // console.log(data.headerCollection.items[0].logo.image[0].url);
+  // console.log(data.headerCollection.items[0].logo.image[0].url);
 
   const handleToggle = () => {
     onToggle();
@@ -41,10 +41,10 @@ const Header = () => {
   };
 
   const handleLogout = () => {
-    localStorage.setItem('isLoggedIn', 'false');
-    const storedLoggedIn = localStorage.getItem('isLoggedIn');
-    setIsLoggedIn(storedLoggedIn)
-  }
+    localStorage.setItem("isLoggedIn", "false");
+    const storedLoggedIn = localStorage.getItem("isLoggedIn");
+    setIsLoggedIn(storedLoggedIn);
+  };
 
   const [isDrawerOpen, setDrawer] = useState(false);
 
@@ -176,27 +176,25 @@ const Header = () => {
                 Register
               </Link>
             </Flex>
-          ) :
-          (
+          ) : (
             <Flex
-                _hover={{ color: BORDER_COLOR, textDecoration: "underline" }}
-                align={"center"}
-                gap={"5"}
-                cursor={'pointer'}
+              _hover={{ color: BORDER_COLOR, textDecoration: "underline" }}
+              align={"center"}
+              gap={"5"}
+              cursor={"pointer"}
+            >
+              <FaUser />
+              <Text
+                mx="5"
+                textDecoration={"none"}
+                color={BORDER_COLOR}
+                fontSize={"17px"}
+                onClick={handleLogout}
               >
-                <FaUser />
-                <Text
-                  mx="5"
-                  textDecoration={"none"}
-                  color={BORDER_COLOR}
-                  fontSize={"17px"}
-                  onClick={handleLogout}
-                >
-                  Logout
-                </Text>
-              </Flex>
-          )
-          }
+                Logout
+              </Text>
+            </Flex>
+          )}
 
           <Flex align={"center"} gap={"25px"}>
             <Box pos={"relative"}>
@@ -258,7 +256,7 @@ const Header = () => {
                 mt={"10px"}
                 border="0.5px solid black"
                 borderRadius="5px"
-                bg={'#F9FAFB'}
+                bg={"#F9FAFB"}
               >
                 <NextLink
                   href="/blog"
@@ -283,7 +281,7 @@ const Header = () => {
                   _hover={{ bg: "#D3D3D3" }}
                   padding="10px"
                   cursor={"pointer"}
-                    borderRadius={"5px"}
+                  borderRadius={"5px"}
                 >
                   Contact Us
                 </MenuItem>
