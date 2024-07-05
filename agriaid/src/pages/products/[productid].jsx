@@ -29,6 +29,7 @@ import styles from "./productDetail.module.css"
 
 import classNames from "classnames";
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 // configure algolia
 const client = algoliasearch("6J4Z86A51F", "3fdeb644e42652f2194e1a4bd6f91822");
@@ -135,7 +136,7 @@ export default function ProductDetail() {
                                 key={`${index}`}
                                 className="flex justify-center h-full basis-full shrink-0 grow snap-center snap-always"
                             >
-                                <img
+                                <Image
                                     aria-label="image"
                                     aria-hidden={activeIndex !== index}
                                     className={`w-auto h-full ${styles.focusImage}`}
@@ -183,7 +184,7 @@ export default function ProductDetail() {
                                 )}
                                 onClick={() => setActiveIndex(index)}
                             >
-                                <img
+                                <Image
                                     alt="image"
                                     className="object-contain border border-neutral-200"
                                     width="78"
