@@ -35,7 +35,6 @@ export default function ProductList() {
         }
         try {
             const productData = { customerId, productId, variantId, quantity, sku };
-            console.log("sssssssss", productId, variantId, sku)
             const response = await fetch(`/api/cart/${customerId}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -45,7 +44,6 @@ export default function ProductList() {
             if (response.status === 200) {
                 setAddToCartResponse(result.message);
                 setInformationAlert(true);
-                console.log("Alert set to true");
             }
         } catch (error) {
             console.log("Error adding product to cart:", error);
@@ -57,7 +55,6 @@ export default function ProductList() {
             clearTimeout(informationTimer.current);
             informationTimer.current = window.setTimeout(() => {
                 setInformationAlert(false);
-                console.log("Alert set to false"); // Log to check state change
             }, 5000);
         }
         return () => {

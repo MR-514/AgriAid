@@ -23,7 +23,7 @@ async function createCart(customerId: String) {
 
 // get cart data by customer id
 export async function getCartData(req: Request) {
-    const { customerId } = req.query; 
+    const { customerId } = req.query;
     // console.log("customer id in get method", customerId)
     try {
         // Fetch cart data using ctpClient
@@ -81,6 +81,49 @@ export async function updateLineItems(req: Request) {
         // console.log("added line item to cart")
 
         return new Response(JSON.stringify(updateResponse.body), { status: 200 });
+    } catch (error) {
+        // console.log("Error updating cart:", error);
+        return new Response(JSON.stringify({ error: "Failed to update cart" }), { status: 500 });
+    }
+}
+
+// remove lineitems from cart
+export async function deleteLineItem(req: Request) {
+    const { customerId } = req.query;
+    const { id, quantity } = await req.body;
+    console.log("server req jsonnnnnnnnnnnnnnnnnnnnnnnnn", id, quantity)
+    try {
+        // Fetch cart data by customer ID
+        let cartResponse;
+        try {
+            // console.log("fetching cart details for removing line item")
+            cartResponse = await ctpClient.execute({
+                method: "GET",
+                uri: `/agriaid/carts/customer-id=${customerId}`,
+            });
+            // console.log("in cart response if cart exixts", cartResponse)
+        } catch (error) {
+            return error
+        }
+
+        const { id: cartId, version: cartVersion } = cartResponse.body;
+        // console.log("cart data", cartId, cartVersion)
+
+        // remove line item from the cart
+        const deleteResponse = await ctpClient.execute({
+            method: "POST",
+            uri: `/agriaid/carts/${cartId}`,
+            body: {
+                version: cartVersion,
+                actions: [{
+                    action: "removeLineItem",
+                    lineItemId: id,
+                    quantity: quantity
+                }],
+            },
+        });
+        const result = await deleteResponse
+        return result;
     } catch (error) {
         // console.log("Error updating cart:", error);
         return new Response(JSON.stringify({ error: "Failed to update cart" }), { status: 500 });

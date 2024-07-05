@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./cartStyles.module.css";
 import CartDisplay from "./cartDetails";
 import AddressForm from "./shippingAddress";
 import CartSummary from "./cartSummary";
-import { SfButton, SfSwitch } from "@storefront-ui/react";
+import { SfButton, SfIconCheckCircle, SfIconClose, SfSwitch } from "@storefront-ui/react";
 import classNames from 'classnames';
+import EmptyCart from "./emptyCart";
 
 
 export default function Cart() {
@@ -17,40 +18,45 @@ export default function Cart() {
     const [showCartDetails, setShowCartDetails] = useState(true);
     const [shippingAddressEntered, setShippingAddressEntered] = useState(false);
     const [checkedState, setCheckedState] = useState(false);
+    const [informationAlert, setInformationAlert] = useState(false);
+    const [removeMessage, setRemoveMessage] = useState('')
+    const [itemDeleted, setItemDeleted] = useState(false);
+    const informationTimer = useRef(0);
+
 
     // Fetching cart details
+    const fetchCartData = async () => {
+        const customerId = localStorage.getItem("customerId");
+        try {
+            const response = await fetch(`/api/cart/${customerId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            const result = await response.json();
+            setTotalPrice(result.totalPrice.centAmount);
+            setItemsInCart(result.totalLineItemQuantity);
+            const extractedDetails = extractVariantDetails(result.lineItems);
+            setProductsInCart(extractedDetails);
+        } catch (error) {
+            console.error('Error Fetching Cart Details', error);
+        }
+    };
     useEffect(() => {
-        const fetchCartData = async () => {
-            const customerId = localStorage.getItem("customerId");
-            try {
-                const response = await fetch(`/api/cart/${customerId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                const result = await response.json();
-                setTotalPrice(result.totalPrice.centAmount);
-                setItemsInCart(result.totalLineItemQuantity);
-                const extractedDetails = extractVariantDetails(result.lineItems);
-                setProductsInCart(extractedDetails);
-            } catch (error) {
-                console.error('Error Fetching Cart Details', error);
-            }
-        };
-
         fetchCartData();
-    }, []);
+    }, [itemDeleted]);
 
     // Extracting line items in cart
     const extractVariantDetails = (data) => {
         return data.map(item => {
-            const { name, variant, price, quantity, totalPrice } = item;
+            const { name, variant, price, quantity, totalPrice, id } = item;
             const variantName = name['en-US'];
             const variantPrice = variant.prices[0].value.centAmount;
             const variantQuantity = quantity;
             const variantImage = variant.images[0].url;
             const variantTotalPrice = totalPrice.centAmount;
+            const lineItemId = id
 
             return {
                 id: item.id,
@@ -59,9 +65,47 @@ export default function Cart() {
                 quantity: variantQuantity,
                 image: variantImage,
                 totalPrice: variantTotalPrice,
+                lineItemId: lineItemId
             };
         });
     };
+
+    // remove line item from cart
+    const removeLineItem = async (id, quantity) => {
+        const customerId = localStorage.getItem("customerId");
+        const response = await fetch(`/api/cart/${customerId}`, {
+            method: "DELETE",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id, quantity })
+        })
+        const result = await response.json()
+        if (response.status === 200) {
+            setInformationAlert(true);
+            setRemoveMessage(result.message)
+            setItemDeleted(prev => !prev);
+            // alert removed product from cart
+        } else {
+            setInformationAlert(true);
+            setRemoveMessage("Error removing product")
+        }
+
+    }
+
+    // to handle alerts
+    useEffect(() => {
+        if (informationAlert) {
+            clearTimeout(informationTimer.current);
+            informationTimer.current = window.setTimeout(() => {
+                setInformationAlert(false);
+            }, 5000);
+        }
+        return () => {
+            clearTimeout(informationTimer.current);
+        };
+    }, [informationAlert]);
+
 
     // Toggle shipping address view
     const toggleView = () => {
@@ -74,9 +118,9 @@ export default function Cart() {
         setShippingAddressEntered(true);
     };
 
-    // Conditionally render based on products in cart
+    // check products in cart
     if (productsInCart.length === 0) {
-        return null; // Return null if the cart is empty to render nothing
+        return <><EmptyCart/></>; 
     }
 
     // banner details
@@ -127,7 +171,7 @@ export default function Cart() {
                         {showShippingAddress ? (
                             <AddressForm onSubmitForm={handleShippingAddressSubmit} showCart={toggleView} />
                         ) : (
-                            showCartDetails && <CartDisplay productsInCart={productsInCart} />
+                            showCartDetails && <CartDisplay productsInCart={productsInCart} removeItem={removeLineItem} />
                         )}
                     </>
                 </div>
@@ -141,6 +185,24 @@ export default function Cart() {
                         disabled={!shippingAddressEntered}
                     />
                 </div>
+            </div>
+            <div style={{ position: "fixed", top: 0, right: 0 }}>
+                {informationAlert ? <div
+                    role="alert"
+                    className="flex items-start md:items-center max-w-[600px] shadow-md bg-positive-100 pr-2 pl-4 ring-1 ring-positive-200 typography-text-sm md:typography-text-base py-1 rounded-md"
+                >
+                    <SfIconCheckCircle className="my-2 mr-2 text-positive-700 shrink-0" />
+                    <p className="py-2 mr-2">{removeMessage}</p>
+                    <button
+                        onClick={() => setInformationAlert(false)}
+                        type="button"
+                        className="p-1.5 md:p-2 ml-auto rounded-md text-positive-700 hover:bg-positive-200 active:bg-positive-300 hover:text-positive-800 active:text-positive-900 focus-visible:outline focus-visible:outline-offset"
+                        aria-label="Close positive alert"
+                    >
+                        <SfIconClose className="hidden md:block" />
+                        <SfIconClose size="sm" className="block md:hidden" />
+                    </button>
+                </div> : <></>}
             </div>
         </>
     );

@@ -6,7 +6,10 @@ import {
   SfLink,
 } from "@storefront-ui/react";
 
-export default function CartDisplay({ productsInCart }) {
+export default function CartDisplay({ productsInCart ,removeItem}) {
+  const updateCart = (id,quantity) => {
+    removeItem(id,quantity)
+  }
   return (
     <>
       <div className="border border-gray-300 rounded-lg shadow-lg " style={{ maxWidth: 800, padding: 30 }}>
@@ -60,9 +63,9 @@ export default function CartDisplay({ productsInCart }) {
                       className="rounded-r-none"
                       disabled={product.quantity <= 1}
                       aria-label="Decrease value"
-                      onClick={() =>
-                        handleQuantityChange(product.id, product.quantity - 1)
-                      }
+                      // onClick={() =>
+                      //   handleQuantityChange(product.id, product.quantity - 1)
+                      // }
                     >
                       <SfIconRemove />
                     </SfButton>
@@ -86,9 +89,9 @@ export default function CartDisplay({ productsInCart }) {
                       className="rounded-l-none"
                       disabled={product.quantity >= 5}
                       aria-label="Increase value"
-                      onClick={() =>
-                        handleQuantityChange(product.id, product.quantity + 1)
-                      }
+                      // onClick={() =>
+                      //   handleQuantityChange(product.id, product.quantity + 1)
+                      // }
                     >
                       <SfIconAdd />
                     </SfButton>
@@ -97,7 +100,7 @@ export default function CartDisplay({ productsInCart }) {
                     aria-label="Remove"
                     type="button"
                     className="text-neutral-500 text-xs font-light ml-auto flex items-center px-3 py-1.5"
-                    onClick={() => handleQuantityChange(product.id, 0)}
+                    onClick={() => updateCart(product.lineItemId, product.quantity)}
                   >
                     <SfIconDelete />
                     <span className="hidden ml-1.5 sm:block"> Remove </span>
