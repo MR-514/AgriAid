@@ -29,7 +29,7 @@ const BlogCard = ({ data, language, index }) => {
             alt="image"
             className="hoverImage"
             // src={data.img}
-            src={data?.blog_images.items[0].image[0].url}
+            src={data?.blog_images.items[0]?.image[0]?.url}
             w="100%"
             h="250px"
             mb="25px"
