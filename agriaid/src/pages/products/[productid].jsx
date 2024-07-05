@@ -136,7 +136,7 @@ export default function ProductDetail() {
                                 key={`${index}`}
                                 className="flex justify-center h-full basis-full shrink-0 grow snap-center snap-always"
                             >
-                                <Image
+                                <img
                                     aria-label="image"
                                     aria-hidden={activeIndex !== index}
                                     className={`w-auto h-full ${styles.focusImage}`}
@@ -184,7 +184,7 @@ export default function ProductDetail() {
                                 )}
                                 onClick={() => setActiveIndex(index)}
                             >
-                                <Image
+                                <img
                                     alt="image"
                                     className="object-contain border border-neutral-200"
                                     width="78"

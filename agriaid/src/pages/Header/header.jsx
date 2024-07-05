@@ -197,17 +197,18 @@ const Header = () => {
           )}
 
           <Flex align={"center"} gap={"25px"}>
-            <Box pos={"relative"}>
-              <IconButton
-                onClick={() => setDrawer((prevState) => !prevState)}
-                icon={<Icon as={RiShoppingBagLine} w={20} h={20} />}
-                variant={"ghost"}
-                aria-label={"Toggle basket"}
-                border={"none"}
-                bg={"transparent"}
-                cursor={"pointer"}
-              />
-              {/* {checkoutItems.productQuantity > 0 && (
+            <NextLink href={"/cart"} passHref>
+              <Box pos={"relative"}>
+                <IconButton
+                  onClick={() => setDrawer((prevState) => !prevState)}
+                  icon={<Icon as={RiShoppingBagLine} w={20} h={20} />}
+                  variant={"ghost"}
+                  aria-label={"Toggle basket"}
+                  border={"none"}
+                  bg={"transparent"}
+                  cursor={"pointer"}
+                />
+                {/* {checkoutItems.productQuantity > 0 && (
                 <Box
                   position={'absolute'}
                   top={'0'}
@@ -225,7 +226,8 @@ const Header = () => {
                   </Text>
                 </Box>
               )} */}
-            </Box>
+              </Box>
+            </NextLink>
             <Menu>
               <MenuButton
                 as={Flex}

@@ -5,49 +5,37 @@ import {
   SfIconRemove,
   SfLink,
 } from "@storefront-ui/react";
-import Image from "next/image";
 
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  quantity: number;
-  image: string;
-  totalPrice: number;
-  lineItemId: string;
-}
-
-interface CartDisplayProps {
-  productsInCart: Product[];
+export default function CartDisplay({ productsInCart, removeItem }: {
+  productsInCart: {
+    id: string;
+    name: string;
+    price: number;
+    quantity: number;
+    image: string;
+    totalPrice: number;
+    lineItemId: string;
+  }[];
   removeItem: (id: string, quantity: number) => void;
-}
-
-export default function CartDisplay({ productsInCart, removeItem }: CartDisplayProps) {
+}) {
+  console.log(productsInCart)
   const updateCart = (id: string, quantity: number) => {
-    removeItem(id, quantity);
+    removeItem(id, quantity)
   }
-
-  const handleQuantityChange = (id: string, quantity: number) => {
-    // Handle quantity change logic here
-  };
-
-  const clamp = (value: number, min: number, max: number): number => {
-    return Math.min(Math.max(value, min), max);
-  }
-
   return (
     <>
-      <div className="border border-gray-300 rounded-lg shadow-lg" style={{ maxWidth: 800, padding: 30 }}>
+      <div className="border border-gray-300 rounded-lg shadow-lg " style={{ maxWidth: 800, padding: 30 }}>
+
         <p className="font-bold text-2xl">Shopping Bag</p>
 
-        {productsInCart.map((product) => (
+        {productsInCart ? productsInCart.map((product) => (
           <div
             key={product.id}
             className="relative flex border-b-[1px] border-neutral-200 hover:shadow-lg min-w-[320px] max-w-[640px] p-4"
           >
             <div className="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
               <SfLink href="#">
-                <Image
+                <img
                   className="w-full h-auto border rounded-md border-neutral-200"
                   src={product.image}
                   alt={product.name}
@@ -78,7 +66,7 @@ export default function CartDisplay({ productsInCart, removeItem }: CartDisplayP
 
               <div className="items-center sm:mt-auto sm:flex">
                 <span className="font-bold sm:ml-auto sm:order-1 typography-text-sm sm:typography-text-lg">
-                ₹ {product.totalPrice.toFixed(2)}
+                  ₹ {product.totalPrice.toFixed(2)}
                 </span>
                 <div className="flex items-center justify-between mt-4 sm:mt-0">
                   <div className="flex border border-neutral-300 rounded-md">
@@ -88,7 +76,9 @@ export default function CartDisplay({ productsInCart, removeItem }: CartDisplayP
                       className="rounded-r-none"
                       disabled={product.quantity <= 1}
                       aria-label="Decrease value"
-                      onClick={() => handleQuantityChange(product.id, product.quantity - 1)}
+                    // onClick={() =>
+                    //   handleQuantityChange(product.id, product.quantity - 1)
+                    // }
                     >
                       <SfIconRemove />
                     </SfButton>
@@ -99,12 +89,12 @@ export default function CartDisplay({ productsInCart, removeItem }: CartDisplayP
                       min={1}
                       max={5}
                       value={product.quantity}
-                      onChange={(e) =>
-                        handleQuantityChange(
-                          product.id,
-                          Number(clamp(Number(e.target.value), 1, 5))
-                        )
-                      }
+                    // onChange={(e) =>
+                    //   handleQuantityChange(
+                    //     product.id,
+                    //     Number(clamp(e.target.value, 1, 5))
+                    //   )
+                    // }
                     />
                     <SfButton
                       variant="tertiary"
@@ -112,7 +102,9 @@ export default function CartDisplay({ productsInCart, removeItem }: CartDisplayP
                       className="rounded-l-none"
                       disabled={product.quantity >= 5}
                       aria-label="Increase value"
-                      onClick={() => handleQuantityChange(product.id, product.quantity + 1)}
+                    // onClick={() =>
+                    //   handleQuantityChange(product.id, product.quantity + 1)
+                    // }
                     >
                       <SfIconAdd />
                     </SfButton>
@@ -130,7 +122,8 @@ export default function CartDisplay({ productsInCart, removeItem }: CartDisplayP
               </div>
             </div>
           </div>
-        ))}
+
+        )) : <></>}
       </div>
     </>
   );

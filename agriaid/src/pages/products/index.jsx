@@ -69,7 +69,7 @@ export default function ProductList() {
                 <div className={`border border-neutral-200 rounded-md hover:shadow-lg max-w-[250px] ${styles.productCard}`}>
                     <div className="relative">
                         <SfLink href={`/products/${hit.objectID}`} className="block">
-                            <Image
+                            <img
                                 src={hit.images[0]}
                                 alt={hit["name.en-US"]}
                                 className={`object-cover h-auto rounded-md aspect-square ${styles.productImage}`}
