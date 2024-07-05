@@ -53,7 +53,6 @@ export default function AddressForm({ onSubmitForm, showCart }) {
                 throw new Error('Failed to save address! Please try Again later');
             }
             const result = await response.json();
-            console.log(result)
             onSubmitForm(true);
 
         } catch (error) {
