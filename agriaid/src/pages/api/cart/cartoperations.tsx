@@ -22,8 +22,7 @@ async function createCart(customerId: String) {
 
 
 // get cart data by customer id
-export async function getCartData(req: Request) {
-    const { customerId } = req.query;
+export async function getCartData(customerId:string) {
     // console.log("customer id in get method", customerId)
     try {
         // Fetch cart data using ctpClient
@@ -41,8 +40,8 @@ export async function getCartData(req: Request) {
 }
 
 // update lineitems into cart
-export async function updateLineItems(req: Request) {
-    const { customerId, productId, variantId, quantity, sku } = await req.body;
+export async function updateLineItems(customerId:string, productId:string, variantId:string, quantity:string, sku:string) {
+
     // console.log("server req json", customerId, productId, variantId, quantity, sku)
     try {
         // Fetch cart data by customer ID
@@ -88,10 +87,7 @@ export async function updateLineItems(req: Request) {
 }
 
 // remove lineitems from cart
-export async function deleteLineItem(req: Request) {
-    const { customerId } = req.query;
-    const { id, quantity } = await req.body;
-    console.log("server req jsonnnnnnnnnnnnnnnnnnnnnnnnn", id, quantity)
+export async function deleteLineItem(customerId:string, id:string, quantity:string) {
     try {
         // Fetch cart data by customer ID
         let cartResponse;

@@ -19,7 +19,7 @@ const HeroBanner = ({ images, language }) => {
     setCurrentIndex(newIndex);
   };
 
-  const goToSlide = (index: number) => {
+  const goToSlide = (index) => {
     setCurrentIndex(index);
   };
 

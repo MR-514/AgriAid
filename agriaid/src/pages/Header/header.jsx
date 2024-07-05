@@ -23,7 +23,7 @@ import { FaGreaterThan } from "react-icons/fa6";
 import { RiShoppingBagLine } from "react-icons/ri";
 import { useHeader } from "./header.hooks";
 
-const Header: FC = () => {
+const Header = () => {
   const { isOpen, onToggle } = useDisclosure();
   const [menuIcon, setMenuIcon] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState('');

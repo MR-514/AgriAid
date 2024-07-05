@@ -1,9 +1,10 @@
+import { NextApiRequest, NextApiResponse } from "next";
 import Stripe from "stripe"
 const secretKey = "sk_test_51PY2lLRtmjIVTrIerWt2zzkKVw4MEIraUdfqaEKwiIW5Hmoy8jHOhdBgM5NVo6mP4tdwgpa5m2Nq0xLBjfQDwffb006Ewj4nIr"
 
 const stripe = new Stripe(secretKey);
 
-export default async function handler(req, res) {
+export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     if (req.method !== 'POST') {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }

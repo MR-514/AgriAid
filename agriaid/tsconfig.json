@@ -16,6 +16,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "src/pages/api/cart/[customerId].js", "src/pages/api/check-coupon/coupon.js", "src/pages/api/checkout/payment.tsx", "src/pages/api/checkout/setAddress.js", "src/utils/ctConfiguration.ts", "src/utils/voucherifyConfig.js", "src/pages/api/login/login.js", "src/pages/api/register/register.js", "src/pages/api/orderConfirm/[customerId].js", "src/pages/blog/blogCard.jsx", "src/pages/blog/index.jsx", "src/pages/cart/cartSummary.tsx", "src/pages/cart/emptyCart.jsx", "src/pages/cart/index.jsx", "src/pages/cart/shippingAddress.tsx", "src/pages/Footer/footer.jsx", "src/pages/Header/header.jsx", "src/pages/Home/BlogBanner/blogBanner.jsx", "src/pages/Home/HeroBanner/heroBanner.jsx", "src/pages/Home/index.jsx", "src/pages/Home/SubBanner/subBanner.jsx", "src/pages/products/[productid].jsx", "src/pages/products/index.jsx"],
   "exclude": ["node_modules"]
 }

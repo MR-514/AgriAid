@@ -18,7 +18,6 @@ import {
     SfScrollable,
     SfIconChevronLeft,
     SfIconChevronRight,
-    type SfScrollableOnDragEndData,
 } from '@storefront-ui/react';
 import { useCounter } from 'react-use';
 import { useId, ChangeEvent, useState } from 'react';
@@ -41,7 +40,7 @@ export default function ProductDetail() {
     const min = 1;
     const max = 9;
     const [value, { inc, dec, set }] = useCounter(min);
-    function handleOnChange(event: ChangeEvent<HTMLInputElement>) {
+    function handleOnChange(event) {
         const { value: currentValue } = event.target;
         const nextValue = parseFloat(currentValue);
         set(Number(clamp(nextValue, min, max)));
@@ -50,7 +49,7 @@ export default function ProductDetail() {
     // state for gallery images 
     const [activeIndex, setActiveIndex] = useState(0);
 
-    const onDragged = (event: SfScrollableOnDragEndData) => {
+    const onDragged = (event) => {
         if (event.swipeRight && activeIndex > 0) {
             setActiveIndex((currentActiveIndex) => currentActiveIndex - 1);
         } else if (event.swipeLeft && activeIndex < images.length - 1) {
@@ -69,10 +68,10 @@ export default function ProductDetail() {
         const fetchProductAndVariant = async () => {
 
             try {
-                const productId = router.query.productid as string;
+                const productId = router.query.productid;
                 const productResponse = await index.getObject(productId)
                 // console.log(productResponse)
-                const { images, description, attributes, name, prices, productID, sku, objectID }: any = productResponse
+                const { images, description, attributes, name, prices, productID, sku, objectID } = productResponse
                 setProduct({ images, description, attributes, name, prices, productID, sku, objectID });
 
             } catch (error) {
@@ -88,7 +87,7 @@ export default function ProductDetail() {
         return <div>Loading... </div>;
     }
 
-    const { images, description, attributes, name, prices, productID, sku, objectID }: any = product;
+    const { images, description, attributes, name, prices, productID, sku, objectID } = product;
 
     const addLineItem = async () => {
         const customerId = localStorage.getItem("customerId");

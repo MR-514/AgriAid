@@ -20,7 +20,7 @@ export default function ProductList() {
     const [addToCartResponse, setAddToCartResponse] = useState('');
     const informationTimer = useRef(0);
 
-    const handleClick = async (productData: any) => {
+    const handleClick = async (productData) => {
         setProductId(productData.productID);
         setSku(productData.sku);
         setVariantId(productData.objectID.split('.').pop());
@@ -62,7 +62,7 @@ export default function ProductList() {
         };
     }, [informationAlert]);
 
-    function Hit({ hit }: any) {
+    function Hit({ hit }) {
         return (
             <div className={styles.productlistContainer}>
                 <div className={`border border-neutral-200 rounded-md hover:shadow-lg max-w-[250px] ${styles.productCard}`}>
