@@ -42,10 +42,10 @@ const BlogCard = ({ data, language, index }) => {
             </Text>
             <Text color="#999999" mr="2" fontSize={"0.8rem"}>
               {/* {formatDate(data.publishedDate)} */}
-              {language === "en" ? data.publishedDate : data.publishedDate_hin}
+              {language === "en" ? data.publishedDate : data?.publishedDate_hin}
             </Text>
             <Text color="#999999" fontSize={"0.8rem"}>
-              {language === "en" ? data.duration : data.duration_hin}
+              {language === "en" ? data.duration : data?.duration_hin}
             </Text>
           </Flex>
           <Flex alignItems={"center"} gap={"10px"} mb={"15px"}>
@@ -59,12 +59,12 @@ const BlogCard = ({ data, language, index }) => {
             <Text>{data?.author.name}</Text>
           </Flex>
           <Text fontSize="1.2rem">
-            {language === "en" ? data.name : data.name_hin}
+            {language === "en" ? data.name : data?.name_hin}
           </Text>
           <Text color="#666666" mb={"20px"}>
             {language === "en"
               ? data.shortDescription
-              : data.shortDescription_hin}
+              : data?.shortDescription_hin}
           </Text>
           {/* <Link href={`/blog/${index}`} passHref> */}
           <Flex
