@@ -5,6 +5,7 @@ import {
   SfIconRemove,
   SfLink,
 } from "@storefront-ui/react";
+import Image from "next/image";
 
 export default function CartDisplay({ productsInCart ,removeItem}) {
   const updateCart = (id,quantity) => {
@@ -22,7 +23,7 @@ export default function CartDisplay({ productsInCart ,removeItem}) {
           >
             <div className="relative overflow-hidden rounded-md w-[100px] sm:w-[176px]">
               <SfLink href="#">
-                <img
+                <Image
                   className="w-full h-auto border rounded-md border-neutral-200"
                   src={product.image}
                   alt={product.name}

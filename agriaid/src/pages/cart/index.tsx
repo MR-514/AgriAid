@@ -8,6 +8,7 @@ import CartSummary from "./cartSummary";
 import { SfButton, SfIconCheckCircle, SfIconClose, SfSwitch } from "@storefront-ui/react";
 import classNames from 'classnames';
 import EmptyCart from "./emptyCart";
+import Image from "next/image";
 
 
 export default function Cart() {
@@ -157,7 +158,7 @@ export default function Cart() {
                                     <p className="typography-text-base block mb-4">{description}</p>
                                     <SfButton onClick={() => setShowShippingAddress(true)} className="!bg-black">{buttonText}</SfButton>
                                 </div>
-                                <img src={image} alt={title} className="w-1/2 self-end" />
+                                <Image src={image} alt={title} className="w-1/2 self-end" />
                             </div>
                         </div>
                     ),
