@@ -255,9 +255,10 @@ const Header: FC = () => {
                 </Flex>
               </MenuButton>
               <MenuList
-                mt={"-10px"}
-                border="0.5px solid gray"
+                mt={"10px"}
+                border="0.5px solid black"
                 borderRadius="5px"
+                bg={'#F9FAFB'}
               >
                 <NextLink
                   href="/blog"
@@ -271,8 +272,8 @@ const Header: FC = () => {
                     color={"black"}
                     textDecoration="none"
                     cursor={"pointer"}
-                    // borderBottom={"0.5px solid rgb(200, 200, 200)"}
-                    // borderRadius={"5px"}
+                    borderBottom={"0.5px solid rgb(200, 200, 200)"}
+                    borderRadius={"5px"}
                   >
                     Blog
                   </MenuItem>
@@ -282,7 +283,7 @@ const Header: FC = () => {
                   _hover={{ bg: "#D3D3D3" }}
                   padding="10px"
                   cursor={"pointer"}
-                  //   borderRadius={"5px"}
+                    borderRadius={"5px"}
                 >
                   Contact Us
                 </MenuItem>

@@ -47,6 +47,10 @@ const BlogCard = ({ data, language, index }) => {
               {language === "en" ? data.duration : data.duration_hin}
             </Text>
           </Flex>
+          <Flex alignItems={'center'} gap={'10px'} mb={'15px'}> 
+            <Image src={data?.author.image[0].url} w="50px" h="50px" borderRadius={'50%'}/>
+            <Text>{data?.author.name}</Text>
+          </Flex>
           <Text fontSize="1.2rem">
             {language === "en" ? data.name : data.name_hin}
           </Text>
@@ -55,7 +59,7 @@ const BlogCard = ({ data, language, index }) => {
               ? data.shortDescription
               : data.shortDescription_hin}
           </Text>
-          <Link href={`/blog/${index}`} passHref>
+          {/* <Link href={`/blog/${index}`} passHref> */}
             <Flex
               alignItems={"center"}
               color={"red"}
@@ -67,7 +71,7 @@ const BlogCard = ({ data, language, index }) => {
               <Text>Read more</Text>
               <FaAngleRight />
             </Flex>
-          </Link>
+          {/* </Link> */}
         </Flex>
       </Box>
     </>

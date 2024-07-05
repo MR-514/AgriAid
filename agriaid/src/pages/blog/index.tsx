@@ -23,7 +23,9 @@ const Blog = () => {
   const [language, setLanguage] = useState("en");
 
   const { loading, error, data } = useBlog();
-  // console.log(data?.blogCollection.items[0].longDescription);
+  // console.log(data?.blogCollection.items[0].author.image[0].url);
+  // console.log(data?.blogCollection.items[0].author.name);
+  console.log(data?.blogCollection.items);
 
   const educationalData = [
     {
