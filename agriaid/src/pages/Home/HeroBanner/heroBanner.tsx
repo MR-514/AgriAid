@@ -43,7 +43,7 @@ const HeroBanner = ({ images, language }) => {
             transition="transform 0.5s ease-in-out"
             transform={`translateX(-${currentIndex * 100}%)`}
           >
-            <Image src={image.backgroundImage.image[0].url} width="100%" height={'600px'} />
+            <Image src={image.backgroundImage.image[0].url} alt= "image" width="100%" height={'600px'} />
             <Box
               position="absolute"
               top="0"

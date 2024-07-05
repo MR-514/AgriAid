@@ -5,6 +5,7 @@ import algoliasearch from "algoliasearch";
 import { Hits, InstantSearch, Pagination, RangeInput, RefinementList, SearchBox } from "react-instantsearch";
 import styles from "./product-list.module.css";
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 
 const client = algoliasearch("6J4Z86A51F", "3fdeb644e42652f2194e1a4bd6f91822");
@@ -68,7 +69,7 @@ export default function ProductList() {
                 <div className={`border border-neutral-200 rounded-md hover:shadow-lg max-w-[250px] ${styles.productCard}`}>
                     <div className="relative">
                         <SfLink href={`/products/${hit.objectID}`} className="block">
-                            <img
+                            <Image
                                 src={hit.images[0]}
                                 alt={hit["name.en-US"]}
                                 className={`object-cover h-auto rounded-md aspect-square ${styles.productImage}`}

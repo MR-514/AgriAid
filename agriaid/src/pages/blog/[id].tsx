@@ -1,9 +1,9 @@
 import { useRouter } from "next/router";
 import useBlog from "./blog.hooks";
 import { createClient } from 'contentful';
-    import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 
-const blogDetails = () => {
+const BlogDetails = () => {
     const router = useRouter();
     // console.log(router.query.id);
     const { loading, error, data } = useBlog();
@@ -20,11 +20,11 @@ const blogDetails = () => {
 
     console.log(richTextDocument)
 
-    return(
+    return (
         <>
             <h1>hello</h1>
         </>
     )
 }
 
-export default blogDetails;
+export default BlogDetails;

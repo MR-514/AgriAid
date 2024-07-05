@@ -22,8 +22,8 @@ async function createCart(customerId: String) {
 
 
 // get cart data by customer id
-export async function getCartData(req: Request) {
-    const { customerId } = req.query;
+export async function getCartData(customerId) {
+   
     // console.log("customer id in get method", customerId)
     try {
         // Fetch cart data using ctpClient
