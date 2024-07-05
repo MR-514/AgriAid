@@ -16,13 +16,13 @@ async function createCart(customerId: String) {
         return newCart;
         // console.log(newCart)
     } catch (error) {
-        // console.log(error);
+        console.log(error);
     }
 }
 
 
 // get cart data by customer id
-export async function getCartData(customerId:string) {
+export async function getCartData(customerId: string) {
     // console.log("customer id in get method", customerId)
     try {
         // Fetch cart data using ctpClient
@@ -40,7 +40,7 @@ export async function getCartData(customerId:string) {
 }
 
 // update lineitems into cart
-export async function updateLineItems(customerId:string, productId:string, variantId:string, quantity:string, sku:string) {
+export async function updateLineItems(customerId: string, productId: string, variantId: string, quantity: string, sku: string) {
 
     // console.log("server req json", customerId, productId, variantId, quantity, sku)
     try {
@@ -87,7 +87,7 @@ export async function updateLineItems(customerId:string, productId:string, varia
 }
 
 // remove lineitems from cart
-export async function deleteLineItem(customerId:string, id:string, quantity:string) {
+export async function deleteLineItem(customerId: string, id: string, quantity: string) {
     try {
         // Fetch cart data by customer ID
         let cartResponse;
