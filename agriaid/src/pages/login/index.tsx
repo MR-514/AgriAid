@@ -47,6 +47,7 @@ export default function FormFields() {
                 });
                 const result = await response.json();
                 // store customer id here
+                localStorage.setItem("customerId", result.customerId)
                 localStorage.setItem("isLoggedIn", 'true');
                 router.push('/')
             } catch (error) {
